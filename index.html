@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Metyb — Powered by King Bicchu</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, onValue, set, update, push }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyAF9YkfejbisnZcwk3aIYk8Nf4KjyTMg_U",
+authDomain: "metyb-4085f.firebaseapp.com",
+databaseURL: "https://metyb-4085f-default-rtdb.firebaseio.com",
+projectId: "metyb-4085f",
+storageBucket: "metyb-4085f.firebasestorage.app",
+messagingSenderId: "787079235960",
+appId: "1:787079235960:web:dc1589d0efb5f6940da08d",
+measurementId: "G-E31GWFSSHN"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const storage = getStorage(app);
+
+window.__fb = { app, db, storage, ref, onValue, set, update, push, storageRef, uploadBytes, getDownloadURL };
+window.dispatchEvent(new Event('firebase-ready'));
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://jybkvekfxaiugsgycnpd.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp5Ymt2ZWtmeGFpdWdzZ3ljbnBkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1MzExNDMsImV4cCI6MjEwNTEwNzE0M30.1zv--Ktv1mSTphbyM0grg92HfMJXVz_ni4zu4DHNktQ";
+const SUPABASE_BUCKET = "Metyb";
+
+function supabasePublicUrl(path) {
+if (!path) return "";
+if (/^https?:\/\//i.test(path)) return path;
+const clean = String(path).replace(/^\/+/, "");
+return `${SUPABASE_URL}/storage/v1/object/public/${SUPABASE_BUCKET}/${clean}`;
+}
+
+window.__supabase = null;
+if (window.supabase && window.supabase.createClient) {
+window.__supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}
+
+window.__supabaseHelpers = {
+url: SUPABASE_URL,
+bucket: SUPABASE_BUCKET,
+publicUrl: supabasePublicUrl,
+async upload(path, file, options = {}) {
+if (!window.__supabase) throw new Error("Supabase client not initialized");
+const clean = String(path).replace(/^\/+/, "");
+const { data, error } = await window.__supabase
+.storage
+.from(SUPABASE_BUCKET)
+.upload(clean, file, { upsert: true, cacheControl: "3600", ...options });
+if (error) throw error;
+return supabasePublicUrl(data.path);
+},
+async remove(path) {
+if (!window.__supabase) throw new Error("Supabase client not initialized");
+const clean = String(path).replace(/^\/+/, "");
+return window.__supabase.storage.from(SUPABASE_BUCKET).remove([clean]);
+}
+};
+</script>
+
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: { deepDark: '#0A0A0F' },
+fontFamily: {
+display: ['"Space Grotesk"', 'sans-serif'],
+sans: ['Inter', 'sans-serif'],
+}
+}
+}
+}
+</script>
+
+<style>
+html { font-size: 14px; }
+@media (max-width: 768px) { html { font-size: 13px; } }
+
+#splash-screen {
+position: fixed; inset: 0; top: 0; left: 0; right: 0; bottom: 0;
+width: 100vw; height: 100vh; height: 100dvh; z-index: 9999;
+background-color: #0A0A0F; display: flex; align-items: center; justify-content: center;
+transition: opacity 0.6s ease; overflow: hidden;
+}
+#splash-screen img {
+width: 100vw; height: 100vh; height: 100dvh;
+max-width: 100vw; max-height: 100vh; max-height: 100dvh;
+object-fit: cover; object-position: center; display: block;
+animation: splashFade 3s ease forwards;
+}
+@keyframes splashFade {
+0% { opacity: 0; transform: scale(0.96); }
+20% { opacity: 1; transform: scale(1); }
+85% { opacity: 1; transform: scale(1); }
+100% { opacity: 1; transform: scale(1.02); }
+}
+#splash-screen.fade-out { opacity: 0; pointer-events: none; }
+
+.glass-base {
+background: rgba(255, 255, 255, 0.05);
+backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+border: 1px solid rgba(255, 255, 255, 0.10);
+}
+.glass-header {
+background: rgba(10, 10, 15, 0.75);
+backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.glass-strong {
+background: rgba(18, 18, 26, 0.85);
+backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+border: 1px solid rgba(255, 255, 255, 0.15);
+box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+}
+.glass-pill {
+background: rgba(255, 255, 255, 0.06);
+border: 1px solid rgba(255, 255, 255, 0.12);
+backdrop-filter: blur(12px);
+}
+.glass-pill:hover, .glass-pill.active {
+background: rgba(255, 255, 255, 0.95);
+color: #0A0A0F !important; border-color: rgba(255, 255, 255, 1);
+box-shadow: 0 0 20px rgba(255, 255, 255, 0.35);
+}
+.icon-3d {
+box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4),
+inset 0 -2px 6px rgba(0, 0, 0, 0.4),
+0 10px 25px -5px var(--glow-color, rgba(255, 255, 255, 0.2));
+}
+@keyframes shine {
+0% { transform: translateX(-150%); }
+50%, 100% { transform: translateX(150%); }
+}
+.btn-shine::after {
+content: ''; position: absolute; inset: 0;
+background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+animation: shine 2.4s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0A0A0F; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+
+.hero-banner {
+position: relative; width: 100%; min-height: 320px;
+border-radius: 22px; overflow: hidden;
+border: 1px solid rgba(255, 255, 255, 0.10);
+box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.8);
+display: flex; align-items: center; background-color: #0A0A0F;
+}
+@media (min-width: 768px) { .hero-banner { min-height: 380px; } }
+@media (min-width: 1024px) { .hero-banner { min-height: 420px; } }
+.hero-banner-img {
+position: absolute; inset: 0; width: 100%; height: 100%;
+object-fit: cover; object-position: center; z-index: 1; display: block;
+}
+.hero-banner-overlay {
+position: absolute; inset: 0;
+background: linear-gradient(135deg, rgba(10,10,15,0.78) 0%, rgba(10,10,15,0.55) 50%, rgba(10,10,15,0.85) 100%);
+z-index: 2;
+}
+.hero-banner-content {
+position: relative; z-index: 3; padding: 2rem 1.75rem; width: 100%;
+}
+@media (min-width: 768px) { .hero-banner-content { padding: 2.75rem 2.5rem; } }
+@media (min-width: 1024px) { .hero-banner-content { padding: 3rem 3rem; } }
+
+.hero-banner-blur-bg {
+position: absolute; inset: 0; width: 100%; height: 100%;
+object-fit: cover; object-position: center; z-index: 0;
+filter: blur(3px) brightness(0.7) saturate(1.05);
+transform: scale(1.03); opacity: 0.85; pointer-events: none;
+}
+
+.empty-state {
+text-align: center; padding: 2.5rem 1rem;
+border-radius: 20px; border: 1px dashed rgba(255,255,255,0.12);
+background: rgba(255,255,255,0.02);
+}
+.empty-state i { color: rgba(255,255,255,0.35); }
+
+/* ===== DEVELOPER CARD — FULL IMAGE BACKGROUND WITH GLASS OVERLAY ===== */
+.dev-card-hero {
+position: relative;
+width: 100%;
+max-width: 420px;
+margin: 0 auto;
+border-radius: 30px;
+overflow: hidden;
+border: 1px solid rgba(255,255,255,0.18);
+box-shadow: 0 30px 70px -20px rgba(139, 92, 246, 0.65),
+0 0 0 6px rgba(255,255,255,0.04);
+background: #1a1a24;
+isolation: isolate;
+}
+.dev-card-hero::before {
+content: '';
+position: absolute; inset: 0;
+background:
+linear-gradient(180deg, rgba(10,10,15,0.20) 0%, rgba(10,10,15,0.55) 45%, rgba(10,10,15,0.92) 100%),
+linear-gradient(135deg, rgba(139,92,246,0.30) 0%, rgba(103,232,249,0.18) 100%);
+z-index: 2;
+pointer-events: none;
+}
+.dev-card-hero .dev-bg-img {
+position: absolute; inset: 0;
+width: 100%; height: 100%;
+object-fit: cover;
+object-position: center top;
+z-index: 1;
+display: block;
+transition: transform 0.6s ease;
+}
+.dev-card-hero:hover .dev-bg-img {
+transform: scale(1.04);
+}
+.dev-card-hero .dev-content {
+position: relative;
+z-index: 3;
+padding: 2rem 1.5rem 1.75rem;
+min-height: 420px;
+display: flex;
+flex-direction: column;
+justify-content: flex-end;
+align-items: center;
+text-align: center;
+}
+.dev-card-hero .dev-tag {
+position: absolute;
+top: 1.25rem;
+left: 50%;
+transform: translateX(-50%);
+display: inline-flex;
+align-items: center;
+gap: 6px;
+padding: 5px 14px;
+border-radius: 999px;
+background: rgba(255,255,255,0.14);
+border: 1px solid rgba(255,255,255,0.28);
+backdrop-filter: blur(14px);
+-webkit-backdrop-filter: blur(14px);
+font-size: 9px;
+font-weight: 700;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: #fff;
+white-space: nowrap;
+}
+.dev-card-hero .dev-name {
+font-family: "Space Grotesk", sans-serif;
+font-size: 2rem;
+font-weight: 700;
+line-height: 1.1;
+color: #fff;
+text-shadow: 0 4px 24px rgba(0,0,0,0.75), 0 1px 2px rgba(0,0,0,0.9);
+margin: 0;
+}
+.dev-card-hero .dev-company {
+font-size: 12px;
+font-weight: 600;
+color: #c4b5fd;
+text-shadow: 0 2px 12px rgba(0,0,0,0.85);
+margin-top: 4px;
+}
+.dev-card-hero .dev-role {
+font-size: 12px;
+color: rgba(255,255,255,0.85);
+text-shadow: 0 2px 12px rgba(0,0,0,0.85);
+margin-top: 4px;
+}
+.dev-card-hero .dev-location {
+margin-top: 14px;
+display: inline-flex;
+align-items: center;
+gap: 6px;
+font-size: 10px;
+color: rgba(255,255,255,0.88);
+padding: 5px 12px;
+border-radius: 999px;
+background: rgba(0,0,0,0.45);
+border: 1px solid rgba(255,255,255,0.20);
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+}
+@media (min-width: 768px) {
+.dev-card-hero { max-width: 460px; }
+.dev-card-hero .dev-content { min-height: 470px; padding: 2.25rem 2rem 2rem; }
+.dev-card-hero .dev-name { font-size: 2.25rem; }
+}
+
+.faq-item .faq-answer { max-height: 0; overflow: hidden; transition: max-height .4s ease, padding .4s ease; }
+.faq-item.open .faq-answer { max-height: 300px; padding-top: 8px; padding-bottom: 8px; }
+.faq-item .faq-icon { transition: transform .3s ease; }
+.faq-item.open .faq-icon { transform: rotate(180deg); }
+</style>
+</head>
+
+<body class="bg-deepDark text-white font-sans antialiased overflow-x-hidden relative min-h-screen selection:bg-fuchsia-500 selection:text-white">
+
+<div id="splash-screen">
+<img src="SWBL.JPG" alt="Metyb Loading" onerror="this.style.display='none'" />
+</div>
+
+<div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+<div class="absolute -top-[20%] -left-[10%] w-[500px] h-[500px] bg-purple-600/25 rounded-full blur-[130px] animate-pulse" style="animation-duration: 8s;"></div>
+<div class="absolute top-[30%] -right-[15%] w-[450px] h-[450px] bg-sky-500/20 rounded-full blur-[140px] animate-pulse" style="animation-duration: 10s;"></div>
+<div class="absolute bottom-[10%] left-[20%] w-[400px] h-[400px] bg-fuchsia-600/15 rounded-full blur-[150px]"></div>
+<div class="absolute top-[70%] -left-[10%] w-[380px] h-[380px] bg-cyan-500/15 rounded-full blur-[120px]"></div>
+<div class="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] opacity-40"></div>
+</div>
+
+<header class="fixed top-0 left-0 right-0 h-12 glass-header z-50 transition-all duration-300">
+<div class="max-w-7xl mx-auto h-full px-4 flex items-center justify-between">
+
+<a href="#" data-home-link class="flex items-center gap-2 group">
+<div class="w-7 h-7 rounded-lg overflow-hidden bg-white/5 border border-white/10 shadow-lg shadow-purple-500/20 group-hover:scale-105 transition-transform duration-300">
+<img src="WBL.JPG" alt="Metyb Logo" class="w-full h-full object-cover"
+onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-violet-500 to-cyan-400 flex items-center justify-center text-[10px] font-bold\'>M</div>'" />
+</div>
+<div class="font-display tracking-tight text-sm">
+<span class="font-bold text-white">Metyb</span>
+<span class="font-light text-white/60 ml-1 hidden sm:inline">• King Bicchu</span>
+</div>
+</a>
+
+<nav class="hidden md:flex items-center gap-1.5">
+<a href="#download" class="nav-link glass-pill px-3.5 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5">Download</a>
+<a href="#review" class="nav-link glass-pill px-3.5 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5">Review</a>
+<a href="#details" class="nav-link glass-pill px-3.5 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5">Details</a>
+<a href="#contact" class="nav-link glass-pill px-3.5 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5">Contact</a>
+<a href="#privacy" class="nav-link glass-pill px-3.5 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5">Privacy</a>
+<a href="#support" class="nav-link glass-pill px-3.5 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5">Support</a>
+</nav>
+
+<button id="mobile-menu-btn" class="md:hidden p-1.5 rounded-lg glass-pill text-white/80 hover:text-white" aria-label="Toggle Menu">
+<i data-lucide="menu" class="w-3.5 h-3.5"></i>
+</button>
+</div>
+
+<div id="mobile-menu" class="hidden md:hidden glass-strong border-b border-white/10 px-5 py-3 flex flex-col gap-1.5">
+<a href="#download" class="mobile-nav-link text-[11px] font-medium py-1 text-white/80 hover:text-white transition-colors">Download</a>
+<a href="#review" class="mobile-nav-link text-[11px] font-medium py-1 text-white/80 hover:text-white transition-colors">Review</a>
+<a href="#details" class="mobile-nav-link text-[11px] font-medium py-1 text-white/80 hover:text-white transition-colors">Details</a>
+<a href="#contact" class="mobile-nav-link text-[11px] font-medium py-1 text-white/80 hover:text-white transition-colors">Contact</a>
+<a href="#privacy" class="mobile-nav-link text-[11px] font-medium py-1 text-white/80 hover:text-white transition-colors">Privacy</a>
+<a href="#support" class="mobile-nav-link text-[11px] font-medium py-1 text-white/80 hover:text-white transition-colors">Support</a>
+</div>
+</header>
+
+<main class="relative z-10 pt-14">
+
+<!-- ==================== HOME VIEW ==================== -->
+<div id="view-home" class="view-active">
+
+<section class="max-w-7xl mx-auto px-4 pt-4 pb-3">
+<div class="hero-banner" id="hero-banner">
+<img src="WBL.JPG" alt="" class="hero-banner-blur-bg" aria-hidden="true" onerror="this.style.display='none'" />
+
+<img id="hero-banner-img" class="hero-banner-img hidden" src="" alt="Metyb Banner" />
+<div id="hero-banner-fallback" class="absolute inset-0 z-[1] bg-gradient-to-br from-violet-900/40 via-fuchsia-900/30 to-cyan-900/40"></div>
+<div class="hero-banner-overlay"></div>
+
+<div class="hero-banner-content">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill text-[10px] font-semibold text-fuchsia-300 border-fuchsia-500/30 mb-4">
+<span class="w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-ping"></span>
+<span id="hero-badge-text">2026 Glass Art Edition</span>
+</div>
+
+<h1 id="hero-title" class="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl tracking-tight leading-[1.12] mb-4">
+<span class="text-white">Download.</span>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-300">Art.</span>
+</h1>
+
+<p id="hero-desc" class="text-white/75 text-xs md:text-sm max-w-lg leading-relaxed">
+The fusion of ultra-modern glass interface and neo-artistic experience. Every app is crafted with precision, secured, and packed with visual excellence.
+</p>
+</div>
+</div>
+</section>
+
+<section id="download" class="max-w-7xl mx-auto px-4 py-10 scroll-mt-16">
+<div class="mb-6">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full glass-pill text-[9px] font-bold tracking-widest uppercase text-cyan-300 border-cyan-400/30 mb-1.5">
+2026 DROP
+</div>
+<h2 class="font-display text-xl md:text-2xl font-bold tracking-tight text-white">Collection</h2>
+<p class="text-white/60 text-[11px] mt-1">Click any app to view details and start download</p>
+</div>
+
+<div id="apps-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+<div id="apps-empty" class="empty-state hidden">
+<i data-lucide="package-open" class="w-8 h-8 mx-auto mb-3"></i>
+<h3 class="font-display text-base font-bold text-white mb-1">No apps yet</h3>
+<p class="text-white/50 text-[11px]">Apps added from the admin panel will appear here in real-time.</p>
+</div>
+</section>
+
+<section id="review" class="max-w-7xl mx-auto px-4 py-12 scroll-mt-16">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-8">
+<div>
+<div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full glass-pill text-[9px] font-bold tracking-widest uppercase text-amber-300 border-amber-400/30 mb-1.5">
+★ <span id="review-avg">0</span>/5 RATING
+</div>
+<h2 class="font-display text-xl md:text-2xl font-bold tracking-tight text-white">Loved by Artists</h2>
+</div>
+<p class="text-white/60 text-[11px] max-w-md">See what creators and designers around the world are saying</p>
+</div>
+
+<div id="reviews-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+
+<div id="reviews-empty" class="empty-state hidden">
+<i data-lucide="message-square-dashed" class="w-8 h-8 mx-auto mb-3"></i>
+<h3 class="font-display text-base font-bold text-white mb-1">No reviews yet</h3>
+<p class="text-white/50 text-[11px]">Reviews added from the user panel will appear here in real-time.</p>
+</div>
+</section>
+
+<section id="details" class="max-w-7xl mx-auto px-4 py-12 scroll-mt-16">
+<div class="text-center max-w-xl mx-auto mb-8">
+<div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full glass-pill text-[9px] font-bold tracking-widest uppercase text-purple-300 border-purple-400/30 mb-2">
+Artistic Engineering
+</div>
+<h2 class="font-display text-xl md:text-3xl font-bold tracking-tight text-white">Why Metyb?</h2>
+<p class="text-white/60 text-[11px] md:text-xs mt-1.5">A combination of design and performance you've never felt before.</p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+<div class="md:col-span-2 glass-base rounded-[20px] p-5 md:p-6 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+<div class="absolute -right-10 -bottom-10 w-40 h-40 bg-violet-600/20 rounded-full blur-3xl group-hover:scale-150 transition-all duration-500"></div>
+<div class="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white mb-4">
+<i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+</div>
+<h3 class="font-display text-lg font-bold text-white mb-1.5">Safe & 100% Verified</h3>
+<p class="text-white/70 text-[11px] max-w-md leading-relaxed mb-4">
+Every package is verified with digital signature. No trackers or unnecessary permissions. Clean and fully secure codebase.
+</p>
+<div class="flex items-center gap-4 pt-3 border-t border-white/10">
+<div>
+<div class="font-display text-lg font-bold text-white" id="stat-malware">0</div>
+<div class="text-[10px] text-white/50">Malware Threats</div>
+</div>
+<div class="w-px h-7 bg-white/10"></div>
+<div>
+<div class="font-display text-lg font-bold text-white" id="stat-privacy">99%</div>
+<div class="text-[10px] text-white/50">Privacy First</div>
+</div>
+</div>
+</div>
+
+<div class="glass-base rounded-[20px] p-5 md:p-6 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-28 h-28 bg-cyan-500/20 rounded-full blur-2xl"></div>
+<div class="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white mb-4">
+<i data-lucide="zap" class="w-4 h-4 text-cyan-400"></i>
+</div>
+<h3 class="font-display text-base font-bold text-white mb-1.5">Lightning Fast</h3>
+<p class="text-white/70 text-[11px] leading-relaxed">
+Zero lag, lightweight build and super-optimized architecture that responds in seconds.
+</p>
+</div>
+
+<div class="glass-base rounded-[20px] p-5 md:p-6 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+<div class="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white mb-4">
+<i data-lucide="sparkles" class="w-4 h-4 text-fuchsia-400"></i>
+</div>
+<h3 class="font-display text-base font-bold text-white mb-1.5">Built for Artists</h3>
+<p class="text-white/70 text-[11px] leading-relaxed">
+Pixel-perfect look and glass art finish designed for modern UI designers and creators.
+</p>
+</div>
+
+<div class="md:col-span-2 glass-base rounded-[20px] p-5 md:p-6 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+<div>
+<span class="text-[9px] font-bold text-amber-400 uppercase tracking-wider">Growth & Trust</span>
+<h3 class="font-display text-lg font-bold text-white mt-1">Community Driven Ecosystem</h3>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4">
+<div class="glass-pill p-2.5 rounded-xl text-center">
+<div class="font-display text-lg md:text-xl font-bold text-white" id="stat-downloads">0</div>
+<div class="text-[9px] text-white/50 mt-0.5 uppercase">Downloads</div>
+</div>
+<div class="glass-pill p-2.5 rounded-xl text-center">
+<div class="font-display text-lg md:text-xl font-bold text-white" id="stat-rating">0★</div>
+<div class="text-[9px] text-white/50 mt-0.5 uppercase">Rating</div>
+</div>
+<div class="glass-pill p-2.5 rounded-xl text-center">
+<div class="font-display text-lg md:text-xl font-bold text-white" id="stat-uptime">98%</div>
+<div class="text-[9px] text-white/50 mt-0.5 uppercase">Uptime</div>
+</div>
+<div class="glass-pill p-2.5 rounded-xl text-center">
+<div class="font-display text-lg md:text-xl font-bold text-white" id="stat-apps">0</div>
+<div class="text-[9px] text-white/50 mt-0.5 uppercase">Glass Apps</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ===== DEVELOPER — FULL IMAGE BACKGROUND CARD ===== -->
+<div class="mt-12">
+<div class="text-center mb-8">
+<div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full glass-pill text-[9px] font-bold tracking-widest uppercase text-emerald-300 border-emerald-400/30 mb-2">
+Meet the Developer
+</div>
+<h3 class="font-display text-xl md:text-2xl font-bold tracking-tight text-white">Developer Behind Metyb</h3>
+</div>
+
+<div class="dev-card-hero">
+<img src="W.K.JPG" alt="Wolf King — King Bicchu Developer" class="dev-bg-img"
+onerror="this.style.display='none'" />
+
+<div class="dev-content">
+<span class="dev-tag">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+Lead Developer
+</span>
+
+<h4 class="dev-name">Wolf King</h4>
+<p class="dev-company">King Bicchu</p>
+<p class="dev-role">Frontend Designer & Code Editor Developer</p>
+<p class="dev-location">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+Live in India
+</p>
+</div>
+</div>
+</div>
+</section>
+
+</div><!-- /#view-home -->
+
+<!-- ==================== CONTACT VIEW ==================== -->
+<div id="view-contact" class="view-section hidden">
+<section class="max-w-4xl mx-auto px-4 py-10 scroll-mt-16">
+<div class="text-center mb-10">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill text-[10px] font-semibold text-cyan-300 border-cyan-400/30 mb-4">
+<i data-lucide="mail" class="w-3 h-3"></i><span>Get in Touch</span>
+</div>
+<h1 class="font-display font-extrabold text-3xl md:text-4xl tracking-tight leading-[1.12] mb-3">
+<span class="text-white">Contact</span>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-300">Us</span>
+</h1>
+<p class="text-white/70 text-xs md:text-sm max-w-lg mx-auto leading-relaxed">
+Connect with us through any of the platforms below. We're active across all major social channels and always happy to hear from you.
+</p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+<div class="glass-pill rounded-xl p-4 text-center">
+<div class="w-12 h-12 mx-auto rounded-xl overflow-hidden bg-white/10 border border-white/20 flex items-center justify-center mb-3">
+<img src="K.B.JPG" alt="King Bicchu" class="w-full h-full object-cover"
+onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-violet-500 to-fuchsia-500 flex items-center justify-center text-[11px] font-bold text-white\'>KB</div>'" />
+</div>
+<div class="text-[10px] text-white/50 uppercase tracking-wider mb-1">Company Email</div>
+<div class="text-[11px] font-semibold text-white break-all">
+<a href="mailto:metyb.k.b@gmail.com" class="hover:text-cyan-300 transition-colors">metyb.k.b@gmail.com</a>
+</div>
+</div>
+
+<div class="glass-pill rounded-xl p-4 text-center">
+<div class="w-12 h-12 mx-auto rounded-xl overflow-hidden bg-white/10 border border-white/20 flex items-center justify-center mb-3">
+<img src="K.B.JPG" alt="King Bicchu Company" class="w-full h-full object-cover"
+onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-violet-500 to-fuchsia-500 flex items-center justify-center text-[11px] font-bold text-white\'>KB</div>'" />
+</div>
+<div class="text-[10px] text-white/50 uppercase tracking-wider mb-1">Company</div>
+<div class="text-[11px] font-semibold text-white">King Bicchu</div>
+</div>
+
+<div class="glass-pill rounded-xl p-4 text-center">
+<div class="w-12 h-12 mx-auto rounded-xl overflow-hidden bg-white/10 border border-white/20 flex items-center justify-center mb-3">
+<img src="WBL.JPG" alt="Metyb App" class="w-full h-full object-cover"
+onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-cyan-400 to-violet-500 flex items-center justify-center text-[11px] font-bold text-white\'>M</div>'" />
+</div>
+<div class="text-[10px] text-white/50 uppercase tracking-wider mb-1">App Email</div>
+<div class="text-[11px] font-semibold text-white break-all">
+<a href="mailto:metyb.k.b@gmail.com" class="hover:text-cyan-300 transition-colors">metyb.k.b@gmail.com</a>
+</div>
+</div>
+</div>
+
+<div class="glass-base rounded-[24px] p-6 md:p-8 relative overflow-hidden">
+<div class="absolute -top-20 -right-20 w-60 h-60 bg-violet-600/20 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-20 -left-20 w-60 h-60 bg-fuchsia-600/15 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<div class="text-center mb-6">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill text-[10px] font-semibold text-fuchsia-300 border-fuchsia-400/30 mb-2">
+<i data-lucide="share-2" class="w-3 h-3"></i>
+<span>Follow Us</span>
+</div>
+<h3 class="font-display text-lg md:text-xl font-bold text-white">Connect With Metyb</h3>
+<p class="text-white/60 text-[11px] mt-1">Stay updated with our latest drops and behind-the-scenes</p>
+</div>
+
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 max-w-2xl mx-auto">
+
+<a href="https://youtube.com/@metybe_k.b?si=VrRVNXLD8UwTWoW4" target="_blank" rel="noopener"
+class="glass-base rounded-[16px] p-3 flex flex-col items-center gap-1.5 hover:-translate-y-1 hover:border-red-400/40 transition-all duration-300 group">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-600 to-red-500 flex items-center justify-center shadow-lg shadow-red-500/30 group-hover:scale-110 transition-transform duration-300">
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="none"><path d="M23.5 6.2c-.3-1.2-1.2-2.1-2.4-2.4C19 3.2 12 3.2 12 3.2s-7 0-9.1.6C1.7 4.1.8 5 .5 6.2 0 8.3 0 12 0 12s0 3.7.5 5.8c.3 1.2 1.2 2.1 2.4 2.4 2.1.6 9.1.6 9.1.6s7 0 9.1-.6c1.2-.3 2.1-1.2 2.4-2.4.5-2.1.5-5.8.5-5.8s0-3.7-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg>
+</div>
+<span class="text-[9px] font-semibold text-white/80 group-hover:text-white">YouTube</span>
+</a>
+
+<a href="https://www.facebook.com/share/1CuZigeNTu/" target="_blank" rel="noopener"
+class="glass-base rounded-[16px] p-3 flex flex-col items-center gap-1.5 hover:-translate-y-1 hover:border-blue-400/40 transition-all duration-300 group">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform duration-300">
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="none"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+</div>
+<span class="text-[9px] font-semibold text-white/80 group-hover:text-white">Facebook</span>
+</a>
+
+<a href="https://www.instagram.com/metyb_k.b?exln=MWhzNTQzOWVhbXhheQ==" target="_blank" rel="noopener"
+class="glass-base rounded-[16px] p-3 flex flex-col items-center gap-1.5 hover:-translate-y-1 hover:border-pink-400/40 transition-all duration-300 group">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex items-center justify-center shadow-lg shadow-pink-500/30 group-hover:scale-110 transition-transform duration-300">
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+</div>
+<span class="text-[9px] font-semibold text-white/80 group-hover:text-white">Instagram</span>
+</a>
+
+<a href="https://x.com/Metyb_" target="_blank" rel="noopener"
+class="glass-base rounded-[16px] p-3 flex flex-col items-center gap-1.5 hover:-translate-y-1 hover:border-white/40 transition-all duration-300 group">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-zinc-800 to-black border border-white/20 flex items-center justify-center shadow-lg shadow-white/10 group-hover:scale-110 transition-transform duration-300">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white" stroke="none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+</div>
+<span class="text-[9px] font-semibold text-white/80 group-hover:text-white">X</span>
+</a>
+
+<a href="mailto:metyb.k.b@gmail.com"
+class="glass-base rounded-[16px] p-3 flex flex-col items-center gap-1.5 hover:-translate-y-1 hover:border-emerald-400/40 transition-all duration-300 group">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform duration-300">
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+</div>
+<span class="text-[9px] font-semibold text-white/80 group-hover:text-white">Email</span>
+</a>
+
+</div>
+</div>
+</div>
+</section>
+</div><!-- /#view-contact -->
+
+<!-- ==================== PRIVACY VIEW ==================== -->
+<div id="view-privacy" class="view-section hidden">
+<section class="max-w-4xl mx-auto px-4 py-10 scroll-mt-16">
+<div class="text-center mb-10">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill text-[10px] font-semibold text-emerald-300 border-emerald-400/30 mb-4">
+<i data-lucide="shield-check" class="w-3 h-3"></i><span>Your Privacy Matters</span>
+</div>
+<h1 class="font-display font-extrabold text-3xl md:text-4xl tracking-tight leading-[1.12] mb-3">
+<span class="text-white">Privacy</span>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-300">Policy</span>
+</h1>
+<p class="text-white/70 text-xs md:text-sm max-w-lg mx-auto leading-relaxed">
+Last Updated: 19/09/2026 — This Privacy Policy explains how Metyb collects, uses, and protects your information.
+</p>
+</div>
+
+<div class="glass-base rounded-[24px] p-6 md:p-8 relative overflow-hidden">
+<div class="absolute -top-20 -right-20 w-60 h-60 bg-emerald-600/15 rounded-full blur-3xl"></div>
+<div class="relative z-10 space-y-6">
+
+<div>
+<h2 class="font-display text-lg font-bold text-white mb-2 flex items-center gap-2">
+<span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-cyan-400">1</span>
+Introduction
+</h2>
+<p class="text-white/70 text-[11px] md:text-xs leading-relaxed">
+This Privacy Policy applies to Metyb. We respect your privacy. By using the app, you agree to this policy.
+</p>
+</div>
+
+<div>
+<h2 class="font-display text-lg font-bold text-white mb-2 flex items-center gap-2">
+<span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-fuchsia-400">2</span>
+Information We Collect
+</h2>
+<ul class="text-white/70 text-[11px] md:text-xs leading-relaxed space-y-1 list-disc list-inside">
+<li>Your email address (e.g., for login)</li>
+<li>Your social media usernames:
+<ul class="list-[circle] list-inside ml-4 mt-1 space-y-0.5 text-white/60">
+<li>Facebook username</li>
+<li>Instagram username</li>
+<li>YouTube channel/username</li>
+</ul>
+</li>
+<li>Payment-related information: Transaction ID, payment gateway details</li>
+<li>Device-related information: Device model, OS version</li>
+</ul>
+</div>
+
+<div>
+<h2 class="font-display text-lg font-bold text-white mb-2 flex items-center gap-2">
+<span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-violet-400">3</span>
+Information We Do Not Collect
+</h2>
+<ul class="text-white/70 text-[11px] md:text-xs leading-relaxed space-y-1 list-disc list-inside">
+<li>We do not collect phone numbers</li>
+<li>We do not collect passwords for Facebook, Instagram, or YouTube</li>
+<li>We do not collect any information related to Telegram</li>
+</ul>
+</div>
+
+<div>
+<h2 class="font-display text-lg font-bold text-white mb-2 flex items-center gap-2">
+<span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-amber-400">4</span>
+Purpose of Data Usage
+</h2>
+<ul class="text-white/70 text-[11px] md:text-xs leading-relaxed space-y-1 list-disc list-inside">
+<li>To provide boost services</li>
+<li>To process your orders</li>
+<li>To provide customer support</li>
+<li>To improve the app</li>
+</ul>
+</div>
+
+<div>
+<h2 class="font-display text-lg font-bold text-white mb-2 flex items-center gap-2">
+<span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-emerald-400">5</span>
+Payment and Charges Policy
+</h2>
+<ul class="text-white/70 text-[11px] md:text-xs leading-relaxed space-y-1 list-disc list-inside">
+<li>All payments are processed via 100% safe and secure third-party gateways (e.g., Google Pay, QR, Paytm).</li>
+<li>When you recharge, a <span class="font-semibold text-white">20% service charge</span> is deducted from the total recharge amount.</li>
+<li>The remaining <span class="font-semibold text-white">80%</span> is added to your Metyb wallet.</li>
+<li>You can use this 80% balance for boosts and other features within the app.</li>
+</ul>
+</div>
+
+<div>
+<h2 class="font-display text-lg font-bold text-white mb-2 flex items-center gap-2">
+<span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-cyan-400">6</span>
+Refund Policy
+</h2>
+<ul class="text-white/70 text-[11px] md:text-xs leading-relaxed space-y-1 list-disc list-inside">
+<li>If the payment is successful but the funds are not added to your wallet, and you provide valid proof (screenshot/Transaction ID), the full amount will be refunded.</li>
+<li>If a boost or service is not delivered, the full amount for that order will be refunded to your wallet.</li>
+<li>For refunds, contact: <a href="mailto:metyb.k.b@gmail.com" class="text-cyan-300 hover:underline font-semibold">metyb.k.b@gmail.com</a></li>
+<li>Refunds will be processed within 5–7 working days.</li>
+</ul>
+</div>
+
+<div>
+<h2 class="font-display text-lg font-bold text-white mb-2 flex items-center gap-2">
+<span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-fuchsia-400">7</span>
+Data Sharing
+</h2>
+<ul class="text-white/70 text-[11px] md:text-xs leading-relaxed space-y-1 list-disc list-inside">
+<li>We do not sell any of your personal information to third parties.</li>
+<li>Information may be shared only for legal requirements or payment gateway purposes.</li>
+</ul>
+</div>
+
+<div>
+<h2 class="font-display text-lg font-bold text-white mb-2 flex items-center gap-2">
+<span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-violet-400">8</span>
+Data Security
+</h2>
+<ul class="text-white/70 text-[11px] md:text-xs leading-relaxed space-y-1 list-disc list-inside">
+<li>We employ standard security measures to protect your data.</li>
+<li>We never ask for or store your social media passwords.</li>
+</ul>
+</div>
+
+<div>
+<h2 class="font-display text-lg font-bold text-white mb-2 flex items-center gap-2">
+<span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-amber-400">9</span>
+Contact
+</h2>
+<p class="text-white/70 text-[11px] md:text-xs leading-relaxed mb-3">
+Please contact us if you have any questions or issues:
+</p>
+<div class="flex items-center gap-3 glass-pill rounded-xl p-3">
+<img src="W.K.JPG" alt="Wolf King"
+class="w-12 h-12 rounded-xl object-cover border border-white/20 shrink-0"
+onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a24%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2258%22 font-size=%2234%22 fill=%22%23a78bfa%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-weight=%22bold%22>WK</text></svg>'" />
+<div class="min-w-0">
+<div class="text-[11px] font-semibold text-white">Wolf King</div>
+<div class="text-[10px] text-violet-300">Developer — King Bicchu</div>
+<div class="text-[10px] text-white/60 break-all">
+<a href="mailto:metyb.k.b@gmail.com" class="hover:text-cyan-300">metyb.k.b@gmail.com</a>
+</div>
+</div>
+</div>
+</div>
+
+<div>
+<h2 class="font-display text-lg font-bold text-white mb-2 flex items-center gap-2">
+<span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-emerald-400">10</span>
+Policy Updates
+</h2>
+<ul class="text-white/70 text-[11px] md:text-xs leading-relaxed space-y-1 list-disc list-inside">
+<li>This policy may be updated from time to time.</li>
+<li>We will notify you within the app whenever updates occur.</li>
+</ul>
+</div>
+
+<div class="glass-pill rounded-xl p-4">
+<p class="text-[11px] text-white/70 leading-relaxed">
+<span class="font-semibold text-cyan-300">Questions or Refunds?</span>
+Email us at <a href="mailto:metyb.k.b@gmail.com" class="text-cyan-300 hover:underline font-semibold">metyb.k.b@gmail.com</a>
+or visit our <a href="#contact" class="text-cyan-300 hover:underline page-jump">Contact page</a>.
+</p>
+</div>
+
+</div>
+</div>
+</section>
+</div><!-- /#view-privacy -->
+
+<!-- ==================== SUPPORT VIEW ==================== -->
+<div id="view-support" class="view-section hidden">
+<section class="max-w-4xl mx-auto px-4 py-10 scroll-mt-16">
+<div class="text-center mb-10">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill text-[10px] font-semibold text-amber-300 border-amber-400/30 mb-4">
+<i data-lucide="life-buoy" class="w-3 h-3"></i><span>We're Here to Help</span>
+</div>
+<h1 class="font-display font-extrabold text-3xl md:text-4xl tracking-tight leading-[1.12] mb-3">
+<span class="text-white">Support</span>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-300">Center</span>
+</h1>
+<p class="text-white/70 text-xs md:text-sm max-w-lg mx-auto leading-relaxed">
+Find answers to frequently asked questions or reach out to our support team directly. We're always ready to assist you.
+</p>
+</div>
+
+<div class="glass-base rounded-[24px] p-6 md:p-8 mb-6 relative overflow-hidden text-center">
+<div class="absolute -top-20 -right-20 w-60 h-60 bg-emerald-600/15 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-20 -left-20 w-60 h-60 bg-cyan-600/15 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-tr from-emerald-500 to-cyan-400 flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/30">
+<i data-lucide="life-buoy" class="w-6 h-6 text-white"></i>
+</div>
+<h2 class="font-display text-xl md:text-2xl font-bold text-white mb-2">We're Here for You — 24/7</h2>
+<p class="text-white/70 text-[11px] md:text-xs max-w-lg mx-auto leading-relaxed mb-5">
+Whether it's a bug, a feature request, or just a friendly hello — our team replies to every message within 24 hours, and most within a few hours. Your experience matters to us.
+</p>
+
+<a href="mailto:metyb.k.b@gmail.com"
+class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black font-bold text-[11px] shadow-[0_0_30px_rgba(255,255,255,0.25)] hover:scale-[1.03] active:scale-[0.99] transition-transform">
+<i data-lucide="mail" class="w-3.5 h-3.5"></i>
+<span>metyb.k.b@gmail.com</span>
+</a>
+
+<div class="mt-5 flex flex-wrap items-center justify-center gap-3 text-[10px] text-white/60">
+<span class="glass-pill px-3 py-1 rounded-full flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+Online Now
+</span>
+<span class="glass-pill px-3 py-1 rounded-full flex items-center gap-1.5">
+<i data-lucide="clock" class="w-3 h-3 text-cyan-400"></i>
+Avg. reply: under 6 hours
+</span>
+<span class="glass-pill px-3 py-1 rounded-full flex items-center gap-1.5">
+<i data-lucide="shield-check" class="w-3 h-3 text-emerald-400"></i>
+100% Free Support
+</span>
+</div>
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+<div class="glass-base rounded-[18px] p-5 text-center hover:-translate-y-1 transition-all duration-300">
+<div class="w-10 h-10 mx-auto rounded-lg bg-white/10 border border-white/20 flex items-center justify-center mb-3">
+<i data-lucide="book-open" class="w-4 h-4 text-cyan-400"></i>
+</div>
+<h3 class="font-display text-sm font-bold text-white mb-1">Documentation</h3>
+<p class="text-[10px] text-white/60 leading-relaxed">Browse our detailed guides and documentation for every Metyb app.</p>
+</div>
+<div class="glass-base rounded-[18px] p-5 text-center hover:-translate-y-1 transition-all duration-300">
+<div class="w-10 h-10 mx-auto rounded-lg bg-white/10 border border-white/20 flex items-center justify-center mb-3">
+<i data-lucide="message-circle" class="w-4 h-4 text-fuchsia-400"></i>
+</div>
+<h3 class="font-display text-sm font-bold text-white mb-1">Social Help</h3>
+<p class="text-[10px] text-white/60 leading-relaxed">Reach out to us on any of our social channels for instant help.</p>
+</div>
+<div class="glass-base rounded-[18px] p-5 text-center hover:-translate-y-1 transition-all duration-300">
+<div class="w-10 h-10 mx-auto rounded-lg bg-white/10 border border-white/20 flex items-center justify-center mb-3">
+<i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+</div>
+<h3 class="font-display text-sm font-bold text-white mb-1">24/7 Response</h3>
+<p class="text-[10px] text-white/60 leading-relaxed">We respond to all inquiries within 24 hours, guaranteed.</p>
+</div>
+</div>
+
+<div class="glass-base rounded-[24px] p-6 md:p-8 relative overflow-hidden">
+<div class="absolute -top-20 -right-20 w-60 h-60 bg-amber-600/10 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<h2 class="font-display text-lg font-bold text-white mb-4 flex items-center gap-2">
+<i data-lucide="help-circle" class="w-4 h-4 text-cyan-400"></i>
+Frequently Asked Questions
+</h2>
+
+<div class="space-y-2">
+<div class="faq-item glass-pill rounded-xl overflow-hidden border border-white/10">
+<button class="faq-toggle w-full text-left px-4 py-3 flex items-center justify-between gap-3">
+<span class="text-[11px] font-semibold text-white/90">How do I download an app from Metyb?</span>
+<i data-lucide="chevron-down" class="faq-icon w-3.5 h-3.5 text-white/50 shrink-0"></i>
+</button>
+<div class="faq-answer px-4 text-[10px] text-white/65 leading-relaxed">
+Simply navigate to the Download section on the homepage, click on any app card to open its details modal, and click the "Download Now" button. The download will start automatically.
+</div>
+</div>
+
+<div class="faq-item glass-pill rounded-xl overflow-hidden border border-white/10">
+<button class="faq-toggle w-full text-left px-4 py-3 flex items-center justify-between gap-3">
+<span class="text-[11px] font-semibold text-white/90">Are the apps safe to install?</span>
+<i data-lucide="chevron-down" class="faq-icon w-3.5 h-3.5 text-white/50 shrink-0"></i>
+</button>
+<div class="faq-answer px-4 text-[10px] text-white/65 leading-relaxed">
+Absolutely. Every app on Metyb undergoes strict verification and is checked for malware. We guarantee 100% clean, tracker-free, and safe downloads for all users.
+</div>
+</div>
+
+<div class="faq-item glass-pill rounded-xl overflow-hidden border border-white/10">
+<button class="faq-toggle w-full text-left px-4 py-3 flex items-center justify-between gap-3">
+<span class="text-[11px] font-semibold text-white/90">How do I leave a review?</span>
+<i data-lucide="chevron-down" class="faq-icon w-3.5 h-3.5 text-white/50 shrink-0"></i>
+</button>
+<div class="faq-answer px-4 text-[10px] text-white/65 leading-relaxed">
+Reviews are submitted through the user panel. Once you've used an app, you can share your experience. Reviews appear in real-time on the homepage Review section for everyone to see.
+</div>
+</div>
+
+<div class="faq-item glass-pill rounded-xl overflow-hidden border border-white/10">
+<button class="faq-toggle w-full text-left px-4 py-3 flex items-center justify-between gap-3">
+<span class="text-[11px] font-semibold text-white/90">I found a bug. How do I report it?</span>
+<i data-lucide="chevron-down" class="faq-icon w-3.5 h-3.5 text-white/50 shrink-0"></i>
+</button>
+<div class="faq-answer px-4 text-[10px] text-white/65 leading-relaxed">
+Please report bugs via our Contact page or email. Include a detailed description and, if possible, screenshots. We take all bug reports seriously and will fix issues as quickly as possible.
+</div>
+</div>
+
+<div class="faq-item glass-pill rounded-xl overflow-hidden border border-white/10">
+<button class="faq-toggle w-full text-left px-4 py-3 flex items-center justify-between gap-3">
+<span class="text-[11px] font-semibold text-white/90">How do I request a refund?</span>
+<i data-lucide="chevron-down" class="faq-icon w-3.5 h-3.5 text-white/50 shrink-0"></i>
+</button>
+<div class="faq-answer px-4 text-[10px] text-white/65 leading-relaxed">
+For refunds, contact us at metyb.k.b@gmail.com with your Transaction ID and a screenshot. Valid refunds are processed within 5–7 working days. See our Privacy Policy (Refund Policy section) for full details.
+</div>
+</div>
+</div>
+
+<div class="mt-6 glass-pill rounded-xl p-4">
+<p class="text-[11px] text-white/70 leading-relaxed">
+<span class="font-semibold text-amber-300">Still need help?</span> Our support team is just one click away. Visit our
+<a href="#contact" class="text-cyan-300 hover:underline page-jump">Contact page</a> or email us at <span class="font-semibold text-white">metyb.k.b@gmail.com</span>.
+</p>
+</div>
+</div>
+</div>
+</section>
+</div><!-- /#view-support -->
+
+</main>
+
+<footer class="mt-12 border-t border-white/10 py-6 glass-header text-center relative z-10">
+<div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<div class="w-5 h-5 rounded-md overflow-hidden bg-white/5 border border-white/10">
+<img src="WBL.JPG" alt="Metyb Logo" class="w-full h-full object-cover"
+onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-violet-500 to-cyan-400 flex items-center justify-center text-[9px] font-bold\'>M</div>'" />
+</div>
+<span class="text-[11px] font-semibold text-white/90">Metyb</span>
+<span class="text-[9px] text-white/40">• Powered by King Bicchu</span>
+</div>
+<p class="text-[9px] text-white/40">
+© 2026 Metyb — Powered by King Bicchu. Crafted with Neo-Artistic Precision.
+</p>
+<div class="flex items-center gap-3 text-[9px] text-white/60">
+<a href="#download" class="page-jump hover:text-white transition-colors">Apps</a>
+<span>•</span>
+<a href="#review" class="page-jump hover:text-white transition-colors">Reviews</a>
+<span>•</span>
+<a href="#details" class="page-jump hover:text-white transition-colors">Details</a>
+<span>•</span>
+<a href="#contact" class="page-jump hover:text-white transition-colors">Contact</a>
+<span>•</span>
+<a href="#privacy" class="page-jump hover:text-white transition-colors">Privacy</a>
+<span>•</span>
+<a href="#support" class="page-jump hover:text-white transition-colors">Support</a>
+</div>
+</div>
+</footer>
+
+<div id="app-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-xl flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+<div id="modal-box" class="glass-strong w-full max-w-2xl rounded-[24px] p-5 md:p-6 max-h-[90vh] overflow-y-auto transform scale-95 transition-all duration-300 relative border border-white/20">
+<button id="modal-close-btn" class="absolute top-4 right-4 p-1.5 rounded-full glass-pill text-white/70 hover:text-white transition-colors">
+<i data-lucide="x" class="w-3.5 h-3.5"></i>
+</button>
+<div id="modal-dynamic-content"></div>
+</div>
+</div>
+
+<div id="download-toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 w-[min(92vw,380px)] glass-strong rounded-xl p-3.5 border border-white/20 shadow-2xl transition-all duration-300 translate-y-24 opacity-0 pointer-events-none">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-gradient-to-br from-violet-500 to-cyan-400 flex items-center justify-center font-bold text-white shrink-0">
+<i data-lucide="download" class="w-3.5 h-3.5"></i>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-1">
+<h5 id="toast-title" class="text-[10px] font-bold text-white truncate">Downloading...</h5>
+<span id="toast-percent" class="text-[10px] font-bold text-cyan-300">0%</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+<div id="toast-progress-bar" class="h-full bg-gradient-to-r from-violet-400 to-cyan-400 w-0 transition-all duration-150"></div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+window.addEventListener("load", () => {
+setTimeout(() => {
+const splash = document.getElementById("splash-screen");
+if (splash) {
+splash.classList.add("fade-out");
+setTimeout(() => splash.remove(), 700);
+}
+}, 3000);
+});
+
+let APPS = [];
+let REVIEWS = [];
+let STATS = { downloads: 0, rating: 0, uptime: 98, malware: 0, privacy: 99, apps: 0, reviewAvg: 0 };
+let BANNER = { imageUrl: "", title: "", description: "", badge: "" };
+
+const DEFAULT_GRADIENTS = [
+"from-violet-500 via-fuchsia-500 to-indigo-500",
+"from-cyan-400 via-sky-400 to-blue-500",
+"from-amber-300 via-orange-400 to-pink-500",
+"from-emerald-300 via-teal-400 to-cyan-500",
+"from-fuchsia-400 via-purple-500 to-violet-600",
+"from-zinc-200 via-zinc-300 to-zinc-400"
+];
+
+const AVATAR_COLORS = [
+"text-fuchsia-300","text-cyan-300","text-amber-300",
+"text-emerald-300","text-violet-300","text-pink-300"
+];
+
+function resolveImageUrl(raw) {
+if (!raw) return "";
+const s = String(raw).trim();
+if (!s) return "";
+if (/^(https?:|data:|blob:)/i.test(s)) return s;
+if (s.startsWith("supabase:")) {
+const path = s.slice("supabase:".length).replace(/^\/+/, "");
+return (window.__supabaseHelpers && window.__supabaseHelpers.publicUrl)
+? window.__supabaseHelpers.publicUrl(path)
+: "";
+}
+if (s.includes("storage/v1/object")) return s;
+return s;
+}
+
+function getInitials(name) {
+if (!name) return "AN";
+return String(name).trim().split(/\s+/).map(n => n[0]).slice(0, 2).join("").toUpperCase() || "AN";
+}
+
+function getAvatarColor(uid) {
+if (!uid) return AVATAR_COLORS[0];
+let sum = 0;
+for (let i = 0; i < uid.length; i++) sum += uid.charCodeAt(i);
+return AVATAR_COLORS[sum % AVATAR_COLORS.length];
+}
+
+function formatReviewDate(ts) {
+if (!ts) return "";
+const d = new Date(Number(ts));
+if (isNaN(d.getTime())) return "";
+const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+return `${d.getDate().toString().padStart(2,"0")} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function buildReviewText(r) {
+const parts = [];
+if (r.selectedOption) parts.push(r.selectedOption);
+if (r.customText) parts.push(r.customText);
+return parts.join(" — ") || "";
+}
+
+function escapeHtml(s) {
+if (s == null) return "";
+return String(s)
+.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+.replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+function initFirebaseListeners() {
+const fb = window.__fb;
+if (!fb) return false;
+const { db, ref, onValue } = fb;
+
+onValue(ref(db, "apps"), (snap) => {
+const val = snap.val() || {};
+APPS = Object.entries(val).map(([id, v]) => ({
+id,
+name: v.name || "",
+iconChar: v.iconChar || (v.name ? v.name.charAt(0).toUpperCase() : "?"),
+iconUrl: resolveImageUrl(v.iconUrl || v.icon || ""),
+gradient: v.gradient || DEFAULT_GRADIENTS[0],
+glowColor: v.glowColor || "rgba(139,92,246,0.6)",
+tag: v.tag || "",
+tagClass: v.tagClass || "bg-white/10 text-white/70 border-white/15",
+shortDesc: v.shortDesc || "",
+longDesc: v.longDesc || "",
+size: v.size || "",
+downloads: Number(v.downloads || 0),
+rating: Number(v.rating || 0),
+version: v.version || "",
+platforms: Array.isArray(v.platforms) ? v.platforms : [],
+features: Array.isArray(v.features) ? v.features : [],
+screenshots: Array.isArray(v.screenshots) ? v.screenshots.map(resolveImageUrl) : [],
+downloadUrl: v.downloadUrl || ""
+}));
+renderApps();
+STATS.apps = APPS.length;
+renderStats();
+});
+
+onValue(ref(db, "reviews"), (snap) => {
+const val = snap.val() || {};
+REVIEWS = Object.entries(val)
+.map(([uid, v]) => {
+if (!v || typeof v !== "object") return null;
+const username = v.username || v.name || "Anonymous";
+const avatarUrl = resolveImageUrl(v.avatar || v.avatarUrl || "");
+const rating = Number(v.rating || 5);
+const timestamp = Number(v.timestamp || 0);
+const selectedOption = v.selectedOption || "";
+const customText = v.customText || v.text || "";
+return {
+uid, userId: v.userId || uid, username, email: v.email || "",
+initials: getInitials(username),
+color: getAvatarColor(v.userId || uid),
+avatarUrl, rating, selectedOption, customText,
+text: buildReviewText({ selectedOption, customText }),
+timestamp, date: formatReviewDate(timestamp)
+};
+})
+.filter(Boolean)
+.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+renderReviews();
+if (REVIEWS.length > 0) {
+const avg = REVIEWS.reduce((s, r) => s + r.rating, 0) / REVIEWS.length;
+STATS.reviewAvg = Number(avg.toFixed(1));
+STATS.rating = Number(avg.toFixed(1));
+renderStats();
+}
+});
+
+onValue(ref(db, "stats"), (snap) => {
+const v = snap.val() || {};
+STATS = {
+...STATS,
+downloads: v.downloads != null ? Number(v.downloads) : STATS.downloads,
+rating: v.rating != null ? Number(v.rating) : STATS.rating,
+uptime: v.uptime != null ? Number(v.uptime) : STATS.uptime,
+malware: v.malware != null ? Number(v.malware) : STATS.malware,
+privacy: v.privacy != null ? Number(v.privacy) : STATS.privacy,
+apps: v.apps != null ? Number(v.apps) : STATS.apps
+};
+renderStats();
+});
+
+onValue(ref(db, "banner"), (snap) => {
+const v = snap.val() || {};
+BANNER = {
+imageUrl: resolveImageUrl(v.imageUrl || v.image || ""),
+title: v.title || "",
+description: v.description || "",
+badge: v.badge || ""
+};
+renderBanner();
+});
+
+return true;
+}
+
+function renderApps() {
+const grid = document.getElementById("apps-grid");
+const empty = document.getElementById("apps-empty");
+
+if (!APPS.length) {
+grid.innerHTML = "";
+grid.classList.add("hidden");
+empty.classList.remove("hidden");
+lucide.createIcons();
+return;
+}
+grid.classList.remove("hidden");
+empty.classList.add("hidden");
+
+grid.innerHTML = APPS.map(app => `
+<div class="glass-base rounded-[20px] p-3.5 cursor-pointer hover:-translate-y-1.5 transition-all duration-300 group relative border border-white/10 flex flex-col justify-between"
+style="--glow-color:${app.glowColor}" data-app-id="${app.id}">
+<div>
+<div class="flex items-start justify-between mb-2.5">
+${app.iconUrl
+? `<img src="${app.iconUrl}" alt="${escapeHtml(app.name)}" class="w-12 h-12 rounded-[14px] object-cover icon-3d group-hover:rotate-3 transition-transform duration-300"
+onerror="this.outerHTML='<div class=\\'w-12 h-12 rounded-[14px] bg-gradient-to-br ${app.gradient} flex items-center justify-center font-display font-extrabold text-lg text-white icon-3d\\'>${app.iconChar}</div>'" />`
+: `<div class="w-12 h-12 rounded-[14px] bg-gradient-to-br ${app.gradient} flex items-center justify-center font-display font-extrabold text-lg text-white icon-3d group-hover:rotate-3 transition-transform duration-300">${app.iconChar}</div>`
+}
+${app.tag ? `<span class="text-[8px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${app.tagClass}">${escapeHtml(app.tag)}</span>` : ``}
+</div>
+<h3 class="font-display font-bold text-sm text-white group-hover:text-cyan-300 transition-colors">${escapeHtml(app.name)}</h3>
+<p class="text-[10px] text-white/70 mt-1 leading-relaxed line-clamp-2">${escapeHtml(app.shortDesc)}</p>
+</div>
+<div class="flex items-center gap-1.5 mt-3.5 pt-2.5 border-t border-white/10">
+${app.size ? `<span class="glass-pill px-1.5 py-0.5 rounded-md text-[9px] text-white/70">${escapeHtml(app.size)}</span>` : ``}
+<span class="glass-pill px-1.5 py-0.5 rounded-md text-[9px] text-white/70">↓ ${app.downloads}</span>
+<span class="glass-pill px-1.5 py-0.5 rounded-md text-[9px] text-amber-300">★ ${app.rating}</span>
+</div>
+</div>
+`).join("");
+
+grid.querySelectorAll("[data-app-id]").forEach(el => {
+el.addEventListener("click", () => {
+const app = APPS.find(a => a.id === el.dataset.appId);
+if (app) openAppModal(app);
+});
+});
+lucide.createIcons();
+}
+
+function renderReviews() {
+const grid = document.getElementById("reviews-grid");
+const empty = document.getElementById("reviews-empty");
+
+if (!REVIEWS.length) {
+grid.innerHTML = "";
+grid.classList.add("hidden");
+empty.classList.remove("hidden");
+document.getElementById("review-avg").textContent = "0";
+lucide.createIcons();
+return;
+}
+grid.classList.remove("hidden");
+empty.classList.add("hidden");
+
+const avg = (REVIEWS.reduce((s, r) => s + r.rating, 0) / REVIEWS.length).toFixed(1);
+document.getElementById("review-avg").textContent = avg;
+
+grid.innerHTML = REVIEWS.slice(0, 6).map(r => `
+<div class="glass-base rounded-[16px] p-4 hover:-translate-y-1 transition-all duration-300 relative group">
+<span class="absolute top-3 right-4 text-4xl font-serif text-white/5 select-none pointer-events-none group-hover:text-white/10 transition-colors">“</span>
+<div class="flex items-center gap-2.5 mb-3">
+${r.avatarUrl
+? `<img src="${r.avatarUrl}" alt="${escapeHtml(r.username)}" class="w-8 h-8 rounded-full object-cover border border-white/15"
+onerror="this.outerHTML='<div class=\\'w-8 h-8 rounded-full glass-pill flex items-center justify-center font-bold text-[10px] ${r.color}\\'>${r.initials}</div>'" />`
+: `<div class="w-8 h-8 rounded-full glass-pill flex items-center justify-center font-bold text-[10px] ${r.color}">${r.initials}</div>`
+}
+<div>
+<h4 class="text-[11px] font-semibold text-white">${escapeHtml(r.username)}</h4>
+<div class="flex items-center gap-1 text-[9px] text-white/40">
+<span>${escapeHtml(r.date)}</span> • <span class="text-amber-300">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</span>
+</div>
+</div>
+</div>
+${r.selectedOption ? `<p class="text-white/85 text-[10px] md:text-[11px] leading-relaxed mb-1">"${escapeHtml(r.selectedOption)}"</p>` : ``}
+${r.customText ? `<p class="text-white/60 text-[10px] md:text-[11px] leading-relaxed italic">${escapeHtml(r.customText)}</p>` : ``}
+</div>
+`).join("");
+lucide.createIcons();
+}
+
+function renderStats() {
+document.getElementById("stat-downloads").textContent = STATS.downloads;
+document.getElementById("stat-rating").textContent = STATS.rating + "★";
+document.getElementById("stat-uptime").textContent = STATS.uptime + "%";
+document.getElementById("stat-apps").textContent = STATS.apps;
+document.getElementById("stat-malware").textContent = STATS.malware;
+document.getElementById("stat-privacy").textContent = STATS.privacy + "%";
+}
+
+function renderBanner() {
+const img = document.getElementById("hero-banner-img");
+const fallback = document.getElementById("hero-banner-fallback");
+const blurBg = document.querySelector(".hero-banner-blur-bg");
+
+if (BANNER.imageUrl) {
+img.src = BANNER.imageUrl;
+img.classList.remove("hidden");
+fallback.classList.add("hidden");
+if (blurBg) blurBg.style.opacity = "0.35";
+img.onerror = () => {
+img.classList.add("hidden");
+fallback.classList.remove("hidden");
+if (blurBg) blurBg.style.opacity = "0.85";
+};
+} else {
+img.removeAttribute("src");
+img.classList.add("hidden");
+fallback.classList.add("hidden");
+if (blurBg) blurBg.style.opacity = "0.85";
+}
+
+if (BANNER.badge) document.getElementById("hero-badge-text").textContent = BANNER.badge;
+if (BANNER.title) document.getElementById("hero-title").innerHTML = BANNER.title;
+if (BANNER.description) document.getElementById("hero-desc").textContent = BANNER.description;
+}
+
+const modal = document.getElementById("app-modal");
+const modalBox = document.getElementById("modal-box");
+const modalCloseBtn = document.getElementById("modal-close-btn");
+const modalContent = document.getElementById("modal-dynamic-content");
+let isDownloading = false;
+
+function openAppModal(app) {
+modalContent.innerHTML = `
+<div class="flex flex-col md:flex-row gap-4 items-start mb-4">
+${app.iconUrl
+? `<img src="${app.iconUrl}" alt="${escapeHtml(app.name)}" class="w-16 h-16 md:w-20 md:h-20 rounded-2xl object-cover icon-3d shrink-0"
+onerror="this.outerHTML='<div class=\\'w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br ${app.gradient} flex items-center justify-center font-display font-extrabold text-2xl text-white icon-3d shrink-0\\'>${app.iconChar}</div>'" />`
+: `<div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br ${app.gradient} flex items-center justify-center font-display font-extrabold text-2xl text-white icon-3d shrink-0">${app.iconChar}</div>`
+}
+<div class="flex-1">
+<div class="flex flex-wrap items-center gap-1.5 mb-1.5">
+${app.tag ? `<span class="text-[8px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${app.tagClass}">${escapeHtml(app.tag)}</span>` : ``}
+${app.version ? `<span class="glass-pill px-2 py-0.5 rounded-full text-[9px] text-white/60 font-mono">${escapeHtml(app.version)}</span>` : ``}
+</div>
+<h2 class="font-display font-bold text-lg md:text-xl text-white">${escapeHtml(app.name)}</h2>
+<div class="flex items-center gap-2 mt-2 flex-wrap">
+${app.platforms.map(p => `
+<span class="glass-pill px-2 py-0.5 rounded-full text-[9px] text-white/80 flex items-center gap-1">
+<i data-lucide="${p === 'Android' ? 'smartphone' : 'monitor'}" class="w-3 h-3 text-cyan-400"></i> ${escapeHtml(p)}
+</span>
+`).join("")}
+</div>
+</div>
+</div>
+
+${app.longDesc ? `<p class="text-[10px] md:text-[11px] text-white/70 leading-relaxed max-w-2xl mb-4">${escapeHtml(app.longDesc)}</p>` : ``}
+
+${app.screenshots.length ? `
+<div class="mb-4">
+<div class="text-[9px] font-bold text-white/80 mb-1.5 uppercase tracking-wider">Interface Preview</div>
+<div class="grid grid-cols-3 gap-2">
+${app.screenshots.map(s => `
+<div class="glass-base rounded-lg p-2 text-center border border-white/10 overflow-hidden">
+<div class="h-20 rounded-md bg-gradient-to-tr from-white/5 to-white/15 flex items-center justify-center mb-1.5 overflow-hidden">
+${s
+? `<img src="${s}" alt="Screenshot" class="w-full h-full object-cover rounded-md"
+onerror="this.outerHTML='<i data-lucide=\\'image\\' class=\\'w-4 h-4 text-white/40\\'></i>'" />`
+: `<i data-lucide="image" class="w-4 h-4 text-white/40"></i>`}
+</div>
+</div>
+`).join("")}
+</div>
+</div>
+` : ``}
+
+${app.features.length ? `
+<div class="space-y-1.5 mb-5">
+${app.features.map(f => `
+<div class="flex items-center gap-2 text-[10px] md:text-[11px] text-white/80">
+<span class="w-3.5 h-3.5 rounded-full bg-white text-black flex items-center justify-center shrink-0 text-[8px] font-bold">✓</span>
+<span>${escapeHtml(f)}</span>
+</div>
+`).join("")}
+</div>
+` : ``}
+
+<div class="space-y-2">
+<button id="modal-dl-btn" class="w-full h-11 rounded-full bg-white text-black font-semibold text-[11px] relative overflow-hidden flex items-center justify-center gap-2 btn-shine shadow-[0_0_30px_rgba(255,255,255,0.25)] hover:scale-[1.01] active:scale-[0.99] transition-transform">
+<div id="btn-progress-fill" class="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-violet-300 via-fuchsia-300 to-cyan-300 transition-all duration-150 w-0 opacity-80"></div>
+<span id="btn-text" class="relative z-10 flex items-center gap-2 font-bold">
+<span>Download Now ${app.size ? `(${escapeHtml(app.size)})` : ``}</span>
+<i data-lucide="arrow-right" class="w-3 h-3"></i>
+</span>
+</button>
+<div class="text-center text-[9px] text-white/40">
+Verified Safe • No Ads • Free Forever • 2026 Build
+</div>
+</div>
+`;
+
+lucide.createIcons();
+modal.classList.remove("opacity-0", "pointer-events-none");
+modalBox.classList.remove("scale-95");
+
+document.getElementById("modal-dl-btn").addEventListener("click", () => triggerDownloadProcess(app));
+}
+
+function closeModal() {
+modal.classList.add("opacity-0", "pointer-events-none");
+modalBox.classList.add("scale-95");
+}
+modalCloseBtn.addEventListener("click", closeModal);
+modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+
+function triggerDownloadProcess(app) {
+if (isDownloading) return;
+isDownloading = true;
+
+const progressFill = document.getElementById("btn-progress-fill");
+const btnText = document.getElementById("btn-text");
+const toast = document.getElementById("download-toast");
+const toastBar = document.getElementById("toast-progress-bar");
+const toastTitle = document.getElementById("toast-title");
+const toastPercent = document.getElementById("toast-percent");
+
+toastTitle.textContent = `Downloading ${app.name}...`;
+toast.classList.remove("opacity-0", "translate-y-24", "pointer-events-none");
+
+let progress = 0;
+const interval = setInterval(() => {
+progress += Math.floor(Math.random() * 12) + 5;
+if (progress > 100) progress = 100;
+
+if (progressFill) progressFill.style.width = `${progress}%`;
+if (btnText) btnText.innerHTML = `Downloading ${progress}%`;
+toastBar.style.width = `${progress}%`;
+toastPercent.textContent = `${progress}%`;
+
+if (progress >= 100) {
+clearInterval(interval);
+if (btnText) btnText.innerHTML = `✓ Installed & Ready`;
+toastTitle.textContent = `${app.name} download complete!`;
+
+try {
+const fb = window.__fb;
+if (fb && fb.db && fb.ref && fb.update && app.id) {
+const current = Number(app.downloads || 0);
+fb.update(fb.ref(fb.db, `apps/${app.id}`), { downloads: current + 1 });
+const currentGlobal = Number(STATS.downloads || 0);
+fb.update(fb.ref(fb.db, `stats`), { downloads: currentGlobal + 1 });
+}
+} catch (e) { console.warn("Firebase increment failed:", e); }
+
+if (app.downloadUrl) {
+try { window.open(app.downloadUrl, "_blank", "noopener"); } catch (e) {}
+}
+
+confetti({
+particleCount: 70, spread: 70, origin: { y: 0.6 },
+colors: ["#a78bfa", "#f0abfc", "#67e8f9", "#fcd34d"]
+});
+
+setTimeout(() => {
+isDownloading = false;
+toast.classList.add("opacity-0", "translate-y-24", "pointer-events-none");
+}, 3500);
+}
+}, 150);
+}
+
+const mobileBtn = document.getElementById("mobile-menu-btn");
+const mobileMenu = document.getElementById("mobile-menu");
+mobileBtn.addEventListener("click", () => mobileMenu.classList.toggle("hidden"));
+document.querySelectorAll(".mobile-nav-link").forEach(l =>
+l.addEventListener("click", () => mobileMenu.classList.add("hidden"))
+);
+
+const VIEWS = ["home", "contact", "privacy", "support"];
+const viewEls = {
+home: document.getElementById("view-home"),
+contact: document.getElementById("view-contact"),
+privacy: document.getElementById("view-privacy"),
+support: document.getElementById("view-support")
+};
+
+function showView(name) {
+if (!VIEWS.includes(name)) name = "home";
+VIEWS.forEach(v => {
+const el = viewEls[v];
+if (!el) return;
+if (v === name) { el.classList.remove("hidden"); }
+else { el.classList.add("hidden"); }
+});
+document.querySelectorAll(".nav-link").forEach(l => {
+l.classList.remove("active");
+if (l.getAttribute("href") === `#${name}`) l.classList.add("active");
+});
+if (name === "home") {
+history.replaceState(null, "", location.pathname + location.search);
+} else {
+history.replaceState(null, "", `#${name}`);
+}
+window.scrollTo({ top: 0, behavior: "smooth" });
+lucide.createIcons();
+}
+
+function handleHash() {
+const hash = location.hash.replace("#", "");
+if (["contact", "privacy", "support"].includes(hash)) {
+showView(hash);
+} else {
+showView("home");
+if (["download", "review", "details"].includes(hash)) {
+const target = document.getElementById(hash);
+if (target) {
+setTimeout(() => {
+const y = target.getBoundingClientRect().top + window.pageYOffset - 56;
+window.scrollTo({ top: y, behavior: "smooth" });
+}, 50);
+}
+}
+}
+}
+window.addEventListener("hashchange", handleHash);
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+anchor.addEventListener("click", function (e) {
+const href = this.getAttribute("href");
+if (href === "#" || href === "") return;
+const id = href.replace("#", "");
+if (["contact", "privacy", "support"].includes(id)) {
+e.preventDefault(); showView(id); return;
+}
+if (["download", "review", "details"].includes(id)) {
+e.preventDefault(); showView("home");
+setTimeout(() => {
+const target = document.getElementById(id);
+if (target) {
+const y = target.getBoundingClientRect().top + window.pageYOffset - 56;
+window.scrollTo({ top: y, behavior: "smooth" });
+}
+}, 50);
+return;
+}
+});
+});
+
+document.querySelector("[data-home-link]").addEventListener("click", (e) => {
+e.preventDefault();
+showView("home");
+window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+const sections = document.querySelectorAll("#view-home section[id]");
+const navLinks = document.querySelectorAll(".nav-link");
+window.addEventListener("scroll", () => {
+if (!document.getElementById("view-home").classList.contains("hidden")) {
+let current = "";
+sections.forEach(s => {
+if (window.scrollY >= s.offsetTop - 100) current = s.id;
+});
+navLinks.forEach(l => {
+l.classList.remove("active");
+if (l.getAttribute("href") === `#${current}`) l.classList.add("active");
+});
+}
+});
+
+document.querySelectorAll(".faq-toggle").forEach(btn => {
+btn.addEventListener("click", () => btn.closest(".faq-item").classList.toggle("open"));
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+renderApps();
+renderReviews();
+renderStats();
+renderBanner();
+lucide.createIcons();
+handleHash();
+});
+
+window.addEventListener("firebase-ready", () => {
+if (!initFirebaseListeners()) console.warn("Firebase SDK not ready.");
+});
+</script>
+</body>
+</html>
