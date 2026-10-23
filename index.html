@@ -1,6 +1,39 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "King Bicchu",
+  "url": "https://metyb.com",
+  "logo": "https://metyb.com/img/K.B.JPG",
+  "image": "https://metyb.com/img/K.B.JPG",
+  "description": "A company creating innovative apps to simplify tasks and enhance digital growth, including the Metyb app for social media influencer support.",
+  "founder": {
+    "@type": "Person",
+    "name": "wolf king",
+    "jobTitle": "Founder & CEO",
+    "image": "https://metyb.com/Img/W.K.JPG"
+  },
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "email": "kingbicchu@gmail.com",
+      "contactType": "customer service",
+      "description": "For general plans and app ideas."
+    },
+    {
+      "@type": "ContactPoint",
+      "email": "metyb.k.b@gmail.com",
+      "contactType": "technical support",
+      "description": "For Metyb app issues and corrections."
+    }
+  ]
+}
+</script>
+
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Metyb — Powered by King Bicchu</title>
@@ -200,7 +233,6 @@ background: rgba(255,255,255,0.02);
 }
 .empty-state i { color: rgba(255,255,255,0.35); }
 
-/* ===== DEVELOPER CARD — FULL IMAGE BACKGROUND WITH GLASS OVERLAY ===== */
 .dev-card-hero {
 position: relative;
 width: 100%;
@@ -319,7 +351,7 @@ backdrop-filter: blur(10px);
 <body class="bg-deepDark text-white font-sans antialiased overflow-x-hidden relative min-h-screen selection:bg-fuchsia-500 selection:text-white">
 
 <div id="splash-screen">
-<img src="SWBL.JPG" alt="Metyb Loading" onerror="this.style.display='none'" />
+<img src="img/SWBL.JPG" alt="Metyb Loading" onerror="this.style.display='none'" />
 </div>
 
 <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
@@ -335,7 +367,7 @@ backdrop-filter: blur(10px);
 
 <a href="#" data-home-link class="flex items-center gap-2 group">
 <div class="w-7 h-7 rounded-lg overflow-hidden bg-white/5 border border-white/10 shadow-lg shadow-purple-500/20 group-hover:scale-105 transition-transform duration-300">
-<img src="WBL.JPG" alt="Metyb Logo" class="w-full h-full object-cover"
+<img src="img/WBL.JPG" alt="Metyb Logo" class="w-full h-full object-cover"
 onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-violet-500 to-cyan-400 flex items-center justify-center text-[10px] font-bold\'>M</div>'" />
 </div>
 <div class="font-display tracking-tight text-sm">
@@ -375,7 +407,7 @@ onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-viole
 
 <section class="max-w-7xl mx-auto px-4 pt-4 pb-3">
 <div class="hero-banner" id="hero-banner">
-<img src="WBL.JPG" alt="" class="hero-banner-blur-bg" aria-hidden="true" onerror="this.style.display='none'" />
+<img src="img/WBL.JPG" alt="" class="hero-banner-blur-bg" aria-hidden="true" onerror="this.style.display='none'" />
 
 <img id="hero-banner-img" class="hero-banner-img hidden" src="" alt="Metyb Banner" />
 <div id="hero-banner-fallback" class="absolute inset-0 z-[1] bg-gradient-to-br from-violet-900/40 via-fuchsia-900/30 to-cyan-900/40"></div>
@@ -517,7 +549,6 @@ Pixel-perfect look and glass art finish designed for modern UI designers and cre
 </div>
 </div>
 
-<!-- ===== DEVELOPER — FULL IMAGE BACKGROUND CARD ===== -->
 <div class="mt-12">
 <div class="text-center mb-8">
 <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full glass-pill text-[9px] font-bold tracking-widest uppercase text-emerald-300 border-emerald-400/30 mb-2">
@@ -527,7 +558,7 @@ Meet the Developer
 </div>
 
 <div class="dev-card-hero">
-<img src="W.K.JPG" alt="Wolf King — King Bicchu Developer" class="dev-bg-img"
+<img src="img/W.K.JPG" alt="Wolf King — King Bicchu Developer" class="dev-bg-img"
 onerror="this.style.display='none'" />
 
 <div class="dev-content">
@@ -569,7 +600,7 @@ Connect with us through any of the platforms below. We're active across all majo
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
 <div class="glass-pill rounded-xl p-4 text-center">
 <div class="w-12 h-12 mx-auto rounded-xl overflow-hidden bg-white/10 border border-white/20 flex items-center justify-center mb-3">
-<img src="K.B.JPG" alt="King Bicchu" class="w-full h-full object-cover"
+<img src="img/K.B.JPG" alt="King Bicchu" class="w-full h-full object-cover"
 onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-violet-500 to-fuchsia-500 flex items-center justify-center text-[11px] font-bold text-white\'>KB</div>'" />
 </div>
 <div class="text-[10px] text-white/50 uppercase tracking-wider mb-1">Company Email</div>
@@ -580,7 +611,7 @@ onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-viole
 
 <div class="glass-pill rounded-xl p-4 text-center">
 <div class="w-12 h-12 mx-auto rounded-xl overflow-hidden bg-white/10 border border-white/20 flex items-center justify-center mb-3">
-<img src="K.B.JPG" alt="King Bicchu Company" class="w-full h-full object-cover"
+<img src="img/K.B.JPG" alt="King Bicchu Company" class="w-full h-full object-cover"
 onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-violet-500 to-fuchsia-500 flex items-center justify-center text-[11px] font-bold text-white\'>KB</div>'" />
 </div>
 <div class="text-[10px] text-white/50 uppercase tracking-wider mb-1">Company</div>
@@ -589,7 +620,7 @@ onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-viole
 
 <div class="glass-pill rounded-xl p-4 text-center">
 <div class="w-12 h-12 mx-auto rounded-xl overflow-hidden bg-white/10 border border-white/20 flex items-center justify-center mb-3">
-<img src="WBL.JPG" alt="Metyb App" class="w-full h-full object-cover"
+<img src="img/WBL.JPG" alt="Metyb App" class="w-full h-full object-cover"
 onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-cyan-400 to-violet-500 flex items-center justify-center text-[11px] font-bold text-white\'>M</div>'" />
 </div>
 <div class="text-[10px] text-white/50 uppercase tracking-wider mb-1">App Email</div>
@@ -791,7 +822,7 @@ Contact
 Please contact us if you have any questions or issues:
 </p>
 <div class="flex items-center gap-3 glass-pill rounded-xl p-3">
-<img src="W.K.JPG" alt="Wolf King"
+<img src="img/W.K.JPG" alt="Wolf King"
 class="w-12 h-12 rounded-xl object-cover border border-white/20 shrink-0"
 onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a24%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2258%22 font-size=%2234%22 fill=%22%23a78bfa%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-weight=%22bold%22>WK</text></svg>'" />
 <div class="min-w-0">
@@ -980,7 +1011,7 @@ For refunds, contact us at metyb.k.b@gmail.com with your Transaction ID and a sc
 <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
 <div class="flex items-center gap-2">
 <div class="w-5 h-5 rounded-md overflow-hidden bg-white/5 border border-white/10">
-<img src="WBL.JPG" alt="Metyb Logo" class="w-full h-full object-cover"
+<img src="img/WBL.JPG" alt="Metyb Logo" class="w-full h-full object-cover"
 onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-violet-500 to-cyan-400 flex items-center justify-center text-[9px] font-bold\'>M</div>'" />
 </div>
 <span class="text-[11px] font-semibold text-white/90">Metyb</span>
