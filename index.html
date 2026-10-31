@@ -1,19 +1,76 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "King Bicchu",
+  "url": "https://metyb.com",
+  "logo": "https://metyb.com/img/p.png",
+  "image": "https://metyb.com/img/p.png",
+  "description": "A company creating innovative apps to simplify tasks and enhance digital growth, including the Metyb app for social media influencer support.",
+  "founder": {
+    "@type": "Person",
+    "name": "wolf king",
+    "jobTitle": "Founder & CEO",
+    "image": "https://metyb.com/img/W.K.JPG"
+  },
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "email": "kingbicchu@gmail.com",
+      "contactType": "customer service",
+      "description": "For general plans and app ideas."
+    },
+    {
+      "@type": "ContactPoint",
+      "email": "metyb.k.b@gmail.com",
+      "contactType": "technical support",
+      "description": "For Metyb app issues and corrections."
+    }
+  ]
+}
+</script>
+
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title> Metyb </title>
+<title>Metyb — Powered by King Bicchu --Social Media Boosting, Android Apps & Digital Products</title>
+<meta name="description" content="Welcome to Metyb (Matix), your digital platform for social media boosting, Instagram and Facebook engagement, YouTube views, Telegram growth, Android app downloads, digital products, and online rewards.">
+<meta name="author" content="Prosenjit Halder">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://metyb.com/">
+
+<!-- Favicon / Website Logo in Browser Title Bar -->
+<link rel="icon" type="image/png" href="img/p.png" />
+<link rel="shortcut icon" type="image/png" href="img/p.png" />
+<link rel="apple-touch-icon" href="img/p.png" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<!-- Tailwind CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: { deepDark: '#0A0A0F' },
+      fontFamily: {
+        display: ['"Space Grotesk"', 'sans-serif'],
+        sans: ['Inter', '"Hind Siliguri"', 'sans-serif'],
+      }
+    }
+  }
+}
+</script>
+
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
-<!-- Firebase SDK (v10 Modular) -->
+<!-- Firebase SDK -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase, ref, onValue, set, update, push }
@@ -22,25 +79,29 @@ import { getStorage, ref as storageRef, uploadBytes, getDownloadURL }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyAF9YkfejbisnZcwk3aIYk8Nf4KjyTMg_U",
-authDomain: "metyb-4085f.firebaseapp.com",
-databaseURL: "https://metyb-4085f-default-rtdb.firebaseio.com",
-projectId: "metyb-4085f",
-storageBucket: "metyb-4085f.firebasestorage.app",
-messagingSenderId: "787079235960",
-appId: "1:787079235960:web:dc1589d0efb5f6940da08d",
-measurementId: "G-E31GWFSSHN"
+  apiKey: "AIzaSyAF9YkfejbisnZcwk3aIYk8Nf4KjyTMg_U",
+  authDomain: "metyb-4085f.firebaseapp.com",
+  databaseURL: "https://metyb-4085f-default-rtdb.firebaseio.com",
+  projectId: "metyb-4085f",
+  storageBucket: "metyb-4085f.firebasestorage.app",
+  messagingSenderId: "787079235960",
+  appId: "1:787079235960:web:dc1589d0efb5f6940da08d",
+  measurementId: "G-E31GWFSSHN"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const storage = getStorage(app);
-
-window.__fb = { app, db, storage, ref, onValue, set, update, push, storageRef, uploadBytes, getDownloadURL };
-window.dispatchEvent(new Event('firebase-ready'));
+try {
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const storage = getStorage(app);
+  window.__fb = { app, db, storage, ref, onValue, set, update, push, storageRef, uploadBytes, getDownloadURL };
+  window.__firebaseReady = true;
+  window.dispatchEvent(new Event('firebase-ready'));
+} catch (e) {
+  console.error("Firebase init failed:", e);
+}
 </script>
 
-<!-- Supabase Client -->
+<!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL = "https://jybkvekfxaiugsgycnpd.supabase.co";
@@ -48,854 +109,1294 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const SUPABASE_BUCKET = "Metyb";
 
 function supabasePublicUrl(path) {
-if (!path) return "";
-if (/^https?:\/\//i.test(path)) return path;
-const clean = String(path).replace(/^\/+/, "");
-return `${SUPABASE_URL}/storage/v1/object/public/${SUPABASE_BUCKET}/${clean}`;
+  if (!path) return "";
+  if (/^https?:\/\//i.test(path)) return path;
+  const clean = String(path).replace(/^\/+/, "");
+  return `${SUPABASE_URL}/storage/v1/object/public/${SUPABASE_BUCKET}/${clean}`;
 }
 
 window.__supabase = null;
 if (window.supabase && window.supabase.createClient) {
-window.__supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  try {
+    window.__supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  } catch (err) {
+    console.warn("Supabase init error:", err);
+  }
 }
 
 window.__supabaseHelpers = {
-url: SUPABASE_URL,
-bucket: SUPABASE_BUCKET,
-publicUrl: supabasePublicUrl,
-async upload(path, file, options = {}) {
-if (!window.__supabase) throw new Error("Supabase client not initialized");
-const clean = String(path).replace(/^\/+/, "");
-const { data, error } = await window.__supabase
-.storage
-.from(SUPABASE_BUCKET)
-.upload(clean, file, { upsert: true, cacheControl: "3600", ...options });
-if (error) throw error;
-return supabasePublicUrl(data.path);
-},
-async remove(path) {
-if (!window.__supabase) throw new Error("Supabase client not initialized");
-const clean = String(path).replace(/^\/+/, "");
-return window.__supabase.storage.from(SUPABASE_BUCKET).remove([clean]);
-}
+  url: SUPABASE_URL,
+  bucket: SUPABASE_BUCKET,
+  publicUrl: supabasePublicUrl,
+  async upload(path, file, options = {}) {
+    if (!window.__supabase) throw new Error("Supabase client not initialized");
+    const clean = String(path).replace(/^\/+/, "");
+    const { data, error } = await window.__supabase
+      .storage
+      .from(SUPABASE_BUCKET)
+      .upload(clean, file, { upsert: true, cacheControl: "3600", ...options });
+    if (error) throw error;
+    return supabasePublicUrl(data.path);
+  },
+  async remove(path) {
+    if (!window.__supabase) throw new Error("Supabase client not initialized");
+    const clean = String(path).replace(/^\/+/, "");
+    return window.__supabase.storage.from(SUPABASE_BUCKET).remove([clean]);
+  }
 };
 </script>
 
-<script>
-tailwind.config = {
-theme: {
-extend: {
-colors: { deepDark: '#0A0A0F' },
-fontFamily: {
-display: ['"Space Grotesk"', 'sans-serif'],
-sans: ['Inter', 'sans-serif'],
-}
-}
-}
-}
-</script>
-
 <style>
-html { font-size: 14px; }
-@media (max-width: 768px) { html { font-size: 13px; } }
+/* Permanent Dark Background Fix */
+html, body {
+  background-color: #0A0A0F !important;
+  color: #ffffff;
+  font-size: 14px;
+}
+@media (max-width: 768px) { html, body { font-size: 13px; } }
 
-/* SPLASH SCREEN */
 #splash-screen {
-position: fixed;
-inset: 0;
-top: 0;
-left: 0;
-right: 0;
-bottom: 0;
-width: 100vw;
-height: 100vh;
-height: 100dvh;
-z-index: 9999;
-background-color: #0A0A0F;
-display: flex;
-align-items: center;
-justify-content: center;
-transition: opacity 0.6s ease;
-overflow: hidden;
+  position: fixed; inset: 0; top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw; height: 100vh; height: 100dvh; z-index: 9999;
+  background-color: #0A0A0F; display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.6s ease; overflow: hidden;
 }
 #splash-screen img {
-width: 100vw;
-height: 100vh;
-height: 100dvh;
-max-width: 100vw;
-max-height: 100vh;
-max-height: 100dvh;
-object-fit: cover;
-object-position: center;
-display: block;
-animation: splashFade 3s ease forwards;
+  width: 100vw; height: 100vh; height: 100dvh;
+  max-width: 100vw; max-height: 100vh; max-height: 100dvh;
+  object-fit: cover; object-position: center; display: block;
+  animation: splashFade 3s ease forwards;
 }
 @keyframes splashFade {
-0% { opacity: 0; transform: scale(0.96); }
-20% { opacity: 1; transform: scale(1); }
-85% { opacity: 1; transform: scale(1); }
-100% { opacity: 1; transform: scale(1.02); }
+  0% { opacity: 0; transform: scale(0.96); }
+  20% { opacity: 1; transform: scale(1); }
+  85% { opacity: 1; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.02); }
 }
 #splash-screen.fade-out { opacity: 0; pointer-events: none; }
 
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* 3D Spinning Letters & Logo Welcome Screen Animation */
+#heavy-portal-overlay {
+  position: fixed; inset: 0; z-index: 9990; pointer-events: none;
+  background: radial-gradient(circle at center, rgba(30, 15, 60, 0.96) 0%, rgba(10, 10, 15, 0.99) 80%);
+  backdrop-filter: blur(0px);
+  opacity: 0;
+  transform: scale(1.1);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), backdrop-filter 0.4s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+  perspective: 1000px;
+}
+#heavy-portal-overlay.portal-active {
+  opacity: 1; pointer-events: auto; transform: scale(1);
+  backdrop-filter: blur(35px);
+}
+.portal-ring {
+  position: absolute; border-radius: 9999px;
+  border: 2px solid rgba(216, 180, 254, 0.45);
+  box-shadow: 0 0 60px rgba(168, 85, 247, 0.6), inset 0 0 60px rgba(56, 189, 248, 0.6);
+  animation: ringPulse 2.4s infinite linear;
+}
+@keyframes ringPulse {
+  0% { transform: scale(0.2) rotate(0deg); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: scale(3.0) rotate(360deg); opacity: 0; }
+}
+
+/* METYB Letter Spin Animations */
+@keyframes letterSpinIn {
+  0% {
+    opacity: 0;
+    transform: rotateY(-360deg) rotateX(45deg) scale(0.2) translateY(60px);
+    filter: blur(8px);
+  }
+  65% {
+    opacity: 1;
+    transform: rotateY(25deg) rotateX(0deg) scale(1.2) translateY(-10px);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateY(0deg) rotateX(0deg) scale(1) translateY(0);
+  }
+}
+
+@keyframes logoPulseRotate {
+  0% { transform: scale(0.4) rotate(-220deg); opacity: 0; filter: blur(6px); }
+  60% { transform: scale(1.15) rotate(15deg); opacity: 1; filter: blur(0); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.welcome-logo-anim {
+  animation: logoPulseRotate 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.spin-letter {
+  display: inline-block;
+  transform-style: preserve-3d;
+  opacity: 0;
+  animation: letterSpinIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+.spin-m { animation-delay: 0.15s; }
+.spin-e { animation-delay: 0.30s; }
+.spin-t { animation-delay: 0.45s; }
+.spin-y { animation-delay: 0.60s; }
+.spin-b { animation-delay: 0.75s; }
+
 .glass-base {
-background: rgba(255, 255, 255, 0.05);
-backdrop-filter: blur(20px);
--webkit-backdrop-filter: blur(20px);
-border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
 }
 .glass-header {
-background: rgba(10, 10, 15, 0.75);
-backdrop-filter: blur(40px);
--webkit-backdrop-filter: blur(40px);
-border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 .glass-strong {
-background: rgba(18, 18, 26, 0.85);
-backdrop-filter: blur(30px);
--webkit-backdrop-filter: blur(30px);
-border: 1px solid rgba(255, 255, 255, 0.15);
-box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+  background: rgba(18, 18, 26, 0.90);
+  backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8);
 }
 .glass-pill {
-background: rgba(255, 255, 255, 0.06);
-border: 1px solid rgba(255, 255, 255, 0.12);
-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
 }
 .glass-pill:hover, .glass-pill.active {
-background: rgba(255, 255, 255, 0.95);
-color: #0A0A0F !important;
-border-color: rgba(255, 255, 255, 1);
-box-shadow: 0 0 20px rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.95);
+  color: #0A0A0F !important; border-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.35);
 }
 .icon-3d {
-box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4),
-inset 0 -2px 6px rgba(0, 0, 0, 0.4),
-0 10px 25px -5px var(--glow-color, rgba(255, 255, 255, 0.2));
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4),
+  inset 0 -2px 6px rgba(0, 0, 0, 0.4),
+  0 10px 25px -5px var(--glow-color, rgba(255, 255, 255, 0.2));
 }
+
 @keyframes shine {
-0% { transform: translateX(-150%); }
-50%, 100% { transform: translateX(150%); }
+  0% { transform: translateX(-150%); }
+  50%, 100% { transform: translateX(150%); }
 }
 .btn-shine::after {
-content: '';
-position: absolute; inset: 0;
-background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-animation: shine 2.4s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  animation: shine 2.4s infinite cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+@keyframes getStartedGlow {
+  0%, 100% { box-shadow: 0 0 30px rgba(168, 85, 247, 0.5), 0 0 60px rgba(56, 189, 248, 0.3); }
+  50% { box-shadow: 0 0 55px rgba(236, 72, 153, 0.75), 0 0 90px rgba(168, 85, 247, 0.5); }
+}
+.btn-get-started {
+  animation: getStartedGlow 3.5s infinite alternate;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: #0A0A0F; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
 
-/* HERO BANNER */
+/* Hero Banner */
 .hero-banner {
-position: relative;
-width: 100%;
-min-height: 320px;
-border-radius: 22px;
-overflow: hidden;
-border: 1px solid rgba(255, 255, 255, 0.10);
-box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.8);
-display: flex;
-align-items: center;
-background-color: #0A0A0F;
+  position: relative; width: 100%; min-height: 480px;
+  border-radius: 26px; overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 25px 70px -20px rgba(0, 0, 0, 0.9);
+  display: flex; align-items: center; background-color: #0A0A0F;
 }
-@media (min-width: 768px) { .hero-banner { min-height: 380px; } }
-@media (min-width: 1024px) { .hero-banner { min-height: 420px; } }
+@media (min-width: 768px) { .hero-banner { min-height: 520px; } }
+@media (min-width: 1024px) { .hero-banner { min-height: 580px; } }
 .hero-banner-img {
-position: absolute; inset: 0;
-width: 100%; height: 100%;
-object-fit: cover; object-position: center;
-z-index: 1; display: block;
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: center; z-index: 1; display: block;
 }
 .hero-banner-overlay {
-position: absolute; inset: 0;
-background: linear-gradient(135deg, rgba(10,10,15,0.78) 0%, rgba(10,10,15,0.55) 50%, rgba(10,10,15,0.85) 100%);
-z-index: 2;
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(10,10,15,0.85) 0%, rgba(10,10,15,0.65) 50%, rgba(10,10,15,0.92) 100%);
+  z-index: 2;
 }
 .hero-banner-content {
-position: relative; z-index: 3;
-padding: 2rem 1.75rem; width: 100%;
+  position: relative; z-index: 3; padding: 2.5rem 2rem; width: 100%;
 }
-@media (min-width: 768px) { .hero-banner-content { padding: 2.75rem 2.5rem; } }
-@media (min-width: 1024px) { .hero-banner-content { padding: 3rem 3rem; } }
+@media (min-width: 768px) { .hero-banner-content { padding: 3.5rem 3rem; } }
+@media (min-width: 1024px) { .hero-banner-content { padding: 4.5rem 4rem; } }
 
 .hero-banner-blur-bg {
-position: absolute;
-inset: 0;
-width: 100%;
-height: 100%;
-object-fit: cover;
-object-position: center;
-z-index: 0;
-filter: blur(3px) brightness(0.7) saturate(1.05);
-transform: scale(1.03);
-opacity: 0.85;
-pointer-events: none;
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: center; z-index: 0;
+  filter: blur(4px) brightness(0.65) saturate(1.1);
+  transform: scale(1.04); opacity: 0.85; pointer-events: none;
 }
 
 .empty-state {
-text-align: center;
-padding: 2.5rem 1rem;
-border-radius: 20px;
-border: 1px dashed rgba(255,255,255,0.12);
-background: rgba(255,255,255,0.02);
+  text-align: center; padding: 3rem 1rem;
+  border-radius: 20px; border: 1px dashed rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.02);
 }
 .empty-state i { color: rgba(255,255,255,0.35); }
 
-.dev-img {
-width: 150px;
-height: 150px;
-border-radius: 22px;
-object-fit: cover;
-object-position: center;
-border: 2px solid rgba(255,255,255,0.15);
-box-shadow: 0 18px 40px -12px rgba(139, 92, 246, 0.65),
-0 0 0 4px rgba(255,255,255,0.04);
-background: #1a1a24;
-display: block;
-transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.dev-img:hover {
-transform: translateY(-4px) scale(1.02);
-box-shadow: 0 24px 50px -12px rgba(139, 92, 246, 0.85),
-0 0 0 4px rgba(255,255,255,0.06);
-}
-@media (min-width: 768px) {
-.dev-img { width: 180px; height: 180px; border-radius: 26px; }
-}
+.faq-item .faq-answer { max-height: 0; overflow: hidden; transition: max-height .4s ease, padding .4s ease; }
+.faq-item.open .faq-answer { max-height: 320px; padding-top: 8px; padding-bottom: 8px; }
+.faq-item .faq-icon { transition: transform .3s ease; }
+.faq-item.open .faq-icon { transform: rotate(180deg); }
 </style>
 </head>
 
-<body class="bg-deepDark text-white font-sans antialiased overflow-x-hidden relative min-h-screen selection:bg-fuchsia-500 selection:text-white">
+<body class="bg-deepDark text-white font-sans antialiased overflow-x-hidden relative min-h-screen selection:bg-fuchsia-500 selection:text-white" style="background-color: #0A0A0F;">
 
-<!-- SPLASH SCREEN -->
+<!-- Splash Screen (Initial load) -->
 <div id="splash-screen">
-<img src="SWBL.JPG" alt="Metyb Loading" onerror="this.style.display='none'" />
+  <img src="img/SWBL.JPG" alt="Metyb Loading" onerror="this.src='img/p.png'; this.className='w-32 h-32 object-contain animate-pulse';" />
 </div>
 
-<!-- AURORA BACKGROUND -->
+<!-- ==================== 3D SPINNER WELCOME TRANSITION OVERLAY ==================== -->
+<div id="heavy-portal-overlay">
+  <div class="portal-ring w-[180px] h-[180px]" style="animation-delay: 0s;"></div>
+  <div class="portal-ring w-[320px] h-[320px]" style="animation-delay: 0.4s;"></div>
+  <div class="portal-ring w-[500px] h-[500px]" style="animation-delay: 0.8s;"></div>
+  
+  <div class="relative z-10 text-center flex flex-col items-center justify-center gap-6 px-4">
+    
+    <!-- Website Logo from img/p.png with glowing aura & 3D entrance -->
+    <div class="relative group">
+      <div class="absolute -inset-3 bg-gradient-to-r from-violet-600 via-fuchsia-500 to-cyan-400 rounded-3xl blur-2xl opacity-80 animate-pulse"></div>
+      <div class="welcome-logo-anim relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-black/60 border-2 border-white/40 p-3 shadow-[0_0_60px_rgba(168,85,247,0.9)] flex items-center justify-center backdrop-blur-xl">
+        <img src="img/p.png" alt="Metyb Logo" class="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]"
+        onerror="this.outerHTML='<div class=\'w-full h-full rounded-2xl bg-gradient-to-tr from-violet-600 to-cyan-400 flex items-center justify-center font-bold text-2xl text-white\'>M</div>'" />
+      </div>
+    </div>
+
+    <!-- M - E - T - Y - B Spinning Letters in sequence -->
+    <div class="flex items-center justify-center gap-2 sm:gap-4 font-display font-black text-4xl sm:text-6xl md:text-7xl tracking-wider select-none">
+      <span class="spin-letter spin-m text-transparent bg-clip-text bg-gradient-to-b from-white via-violet-200 to-violet-500 drop-shadow-[0_0_20px_rgba(168,85,247,0.8)]">M</span>
+      <span class="spin-letter spin-e text-transparent bg-clip-text bg-gradient-to-b from-white via-fuchsia-200 to-fuchsia-500 drop-shadow-[0_0_20px_rgba(236,72,153,0.8)]">E</span>
+      <span class="spin-letter spin-t text-transparent bg-clip-text bg-gradient-to-b from-white via-pink-200 to-pink-500 drop-shadow-[0_0_20px_rgba(244,114,182,0.8)]">T</span>
+      <span class="spin-letter spin-y text-transparent bg-clip-text bg-gradient-to-b from-white via-sky-200 to-cyan-400 drop-shadow-[0_0_20px_rgba(56,189,248,0.8)]">Y</span>
+      <span class="spin-letter spin-b text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-200 to-emerald-400 drop-shadow-[0_0_20px_rgba(52,211,153,0.8)]">B</span>
+    </div>
+
+    <div class="flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill border border-white/20 text-xs font-semibold tracking-widest text-cyan-300 uppercase animate-pulse">
+      <i data-lucide="sparkles" class="w-3.5 h-3.5 text-cyan-300"></i>
+      <span>Entering Artistic Ecosystem...</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- Ambient background lighting -->
 <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-<div class="absolute -top-[20%] -left-[10%] w-[500px] h-[500px] bg-purple-600/25 rounded-full blur-[130px] animate-pulse" style="animation-duration: 8s;"></div>
-<div class="absolute top-[30%] -right-[15%] w-[450px] h-[450px] bg-sky-500/20 rounded-full blur-[140px] animate-pulse" style="animation-duration: 10s;"></div>
-<div class="absolute bottom-[10%] left-[20%] w-[400px] h-[400px] bg-fuchsia-600/15 rounded-full blur-[150px]"></div>
-<div class="absolute top-[70%] -left-[10%] w-[380px] h-[380px] bg-cyan-500/15 rounded-full blur-[120px]"></div>
-<div class="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] opacity-40"></div>
+  <div class="absolute -top-[20%] -left-[10%] w-[500px] h-[500px] bg-purple-600/25 rounded-full blur-[130px] animate-pulse" style="animation-duration: 8s;"></div>
+  <div class="absolute top-[30%] -right-[15%] w-[450px] h-[450px] bg-sky-500/20 rounded-full blur-[140px] animate-pulse" style="animation-duration: 10s;"></div>
+  <div class="absolute bottom-[10%] left-[20%] w-[400px] h-[400px] bg-fuchsia-600/15 rounded-full blur-[150px]"></div>
+  <div class="absolute top-[70%] -left-[10%] w-[380px] h-[380px] bg-cyan-500/15 rounded-full blur-[120px]"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] opacity-40"></div>
 </div>
 
-<!-- HEADER -->
-<header class="fixed top-0 left-0 right-0 h-12 glass-header z-50 transition-all duration-300">
-<div class="max-w-7xl mx-auto h-full px-4 flex items-center justify-between">
+<!-- ==================== HEADER ==================== -->
+<header class="fixed top-0 left-0 right-0 h-16 glass-header z-50 transition-all duration-300">
+<div class="max-w-7xl mx-auto h-full px-3 sm:px-4 flex items-center justify-between gap-2">
 
-<a href="#" class="flex items-center gap-2 group">
-<div class="w-7 h-7 rounded-lg overflow-hidden bg-white/5 border border-white/10 shadow-lg shadow-purple-500/20 group-hover:scale-105 transition-transform duration-300">
-<img src="WBL.JPG" alt="Metyb Logo" class="w-full h-full object-cover"
-onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-violet-500 to-cyan-400 flex items-center justify-center text-[10px] font-bold\'>M</div>'" />
-</div>
-<div class="font-display tracking-tight text-sm">
-<span class="font-bold text-white">Metyb</span>
-<span class="font-light text-white/60 ml-1 hidden sm:inline">• King Bicchu</span>
-</div>
+<!-- Brand Logo -->
+<a href="#home" data-nav="home" class="flex items-center gap-2 group shrink-0">
+  <div class="w-8 h-8 rounded-lg overflow-hidden bg-white/5 border border-white/10 shadow-lg shadow-purple-500/20 group-hover:scale-105 transition-transform duration-300 p-0.5">
+    <img src="img/p.png" alt="Metyb Logo" class="w-full h-full object-contain"
+    onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-violet-500 to-cyan-400 flex items-center justify-center text-[10px] font-bold\'>M</div>'" />
+  </div>
+  <div class="font-display tracking-tight text-xs sm:text-sm">
+    <span class="font-bold text-white">Metyb</span>
+    <span class="font-light text-white/60 ml-1 hidden md:inline">• King Bicchu</span>
+  </div>
 </a>
 
-<nav class="hidden md:flex items-center gap-1.5">
-<a href="#download" class="nav-link glass-pill px-3.5 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5">Download</a>
-<a href="#review" class="nav-link glass-pill px-3.5 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5">Review</a>
-<a href="#details" class="nav-link glass-pill px-3.5 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5">Details</a>
+<!-- 7 Main Action Buttons Directly in Header -->
+<nav class="flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar py-1">
+  <a href="#details" data-nav="details" class="nav-link glass-pill px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5 shrink-0">Details</a>
+  <a href="#review" data-nav="review" class="nav-link glass-pill px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5 shrink-0">Review</a>
+  <a href="#download" data-nav="download" class="nav-link glass-pill px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5 shrink-0">Download</a>
+  <a href="#connect" data-nav="connect" class="nav-link glass-pill px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5 shrink-0">Connect</a>
+  <a href="#privacy" data-nav="privacy" class="nav-link glass-pill px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5 shrink-0">Private Policy</a>
+  <a href="#support" data-nav="support" class="nav-link glass-pill px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5 shrink-0">Support</a>
+  <a href="#developer" data-nav="developer" class="nav-link glass-pill px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-white/80 transition-all duration-300 hover:-translate-y-0.5 shrink-0">Developer</a>
 </nav>
 
-<button id="mobile-menu-btn" class="md:hidden p-1.5 rounded-lg glass-pill text-white/80 hover:text-white" aria-label="Toggle Menu">
-<i data-lucide="menu" class="w-3.5 h-3.5"></i>
-</button>
-</div>
-
-<div id="mobile-menu" class="hidden md:hidden glass-strong border-b border-white/10 px-5 py-3 flex flex-col gap-1.5">
-<a href="#download" class="mobile-nav-link text-[11px] font-medium py-1 text-white/80 hover:text-white transition-colors">Download</a>
-<a href="#review" class="mobile-nav-link text-[11px] font-medium py-1 text-white/80 hover:text-white transition-colors">Review</a>
-<a href="#details" class="mobile-nav-link text-[11px] font-medium py-1 text-white/80 hover:text-white transition-colors">Details</a>
 </div>
 </header>
 
-<main class="relative z-10 pt-14">
+<main class="relative z-10 pt-16 min-h-[calc(100vh-140px)]">
 
-<!-- ==================== HERO BANNER ==================== -->
-<section class="max-w-7xl mx-auto px-4 pt-4 pb-3">
+<!-- ==================== 1. HOME VIEW (HERO BANNER + GET STARTED) ==================== -->
+<div id="view-home" class="view-section">
+<section class="max-w-7xl mx-auto px-4 pt-4 pb-10">
 <div class="hero-banner" id="hero-banner">
-<img src="WBL.JPG" alt="" class="hero-banner-blur-bg" aria-hidden="true" onerror="this.style.display='none'" />
+  <img src="img/WBL.JPG" alt="" class="hero-banner-blur-bg" aria-hidden="true" onerror="this.style.display='none'" />
+  <img id="hero-banner-img" class="hero-banner-img hidden" src="" alt="Metyb Banner" />
+  <div id="hero-banner-fallback" class="absolute inset-0 z-[1] bg-gradient-to-br from-violet-900/40 via-fuchsia-900/30 to-cyan-900/40"></div>
+  <div class="hero-banner-overlay"></div>
 
-<img id="hero-banner-img" class="hero-banner-img hidden" src="" alt="Metyb Banner" />
-<div id="hero-banner-fallback" class="absolute inset-0 z-[1] bg-gradient-to-br from-violet-900/40 via-fuchsia-900/30 to-cyan-900/40"></div>
-<div class="hero-banner-overlay"></div>
+  <div class="hero-banner-content">
+    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill text-[10px] font-semibold text-fuchsia-300 border-fuchsia-500/30 mb-4">
+      <span class="w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-ping"></span>
+      <span id="hero-badge-text">2026 Glass Art Edition</span>
+    </div>
 
-<div class="hero-banner-content">
-<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill text-[10px] font-semibold text-fuchsia-300 border-fuchsia-500/30 mb-4">
-<span class="w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-ping"></span>
-<span id="hero-badge-text">2026 Glass Art Edition</span>
-</div>
+    <h1 id="hero-title" class="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[1.12] mb-4">
+      <span class="text-white">Download.</span>
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-300">Art.</span>
+    </h1>
 
-<h1 id="hero-title" class="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl tracking-tight leading-[1.12] mb-4">
-<span class="text-white">Download.</span>
-<span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-300">Art.</span>
-</h1>
+    <div class="space-y-3 max-w-2xl text-white/80 text-xs sm:text-sm leading-relaxed mb-8">
+      <p id="hero-desc">
+        Welcome to Metyb, your destination for social media boosting,
+        digital products, and innovative mobile applications. Discover
+        services designed to help you grow your online presence across
+        Instagram, Facebook, YouTube, and Telegram.
+      </p>
+      <p class="hidden sm:block">
+        Explore our platform for social media engagement services, Android app downloads,
+        digital solutions, and exciting online rewards. Metyb brings useful digital services
+        together in one convenient place, making it easier to discover tools for your online journey.
+      </p>
+    </div>
 
-<p id="hero-desc" class="text-white/75 text-xs md:text-sm max-w-lg leading-relaxed">
-The fusion of ultra-modern glass interface and neo-artistic experience. Every app is crafted with precision, secured, and packed with visual excellence.
-</p>
-</div>
+    <!-- GET STARTED Button with 3D Spinning Logo & Letters Transition -->
+    <div class="pt-2">
+      <button id="btn-get-started" class="btn-get-started relative group px-8 sm:px-10 py-3.5 sm:py-4 rounded-2xl bg-gradient-to-r from-violet-600 via-fuchsia-600 to-cyan-500 font-display font-bold text-sm sm:text-base text-white tracking-wider uppercase transition-all duration-300 hover:scale-[1.04] active:scale-[0.98] flex items-center gap-3.5 border border-white/30 overflow-hidden shadow-2xl">
+        <div class="absolute inset-0 bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-violet-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <span class="relative z-10 flex items-center gap-3">
+          <span>Get Started</span>
+          <i data-lucide="arrow-right" class="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-1.5"></i>
+        </span>
+        <span class="absolute inset-0 btn-shine"></span>
+      </button>
+    </div>
+
+  </div>
 </div>
 </section>
-
-<!-- ==================== DOWNLOAD SECTION ==================== -->
-<section id="download" class="max-w-7xl mx-auto px-4 py-10 scroll-mt-16">
-<div class="mb-6">
-<div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full glass-pill text-[9px] font-bold tracking-widest uppercase text-cyan-300 border-cyan-400/30 mb-1.5">
-2026 DROP
-</div>
-<h2 class="font-display text-xl md:text-2xl font-bold tracking-tight text-white">Collection</h2>
-<p class="text-white/60 text-[11px] mt-1">Click any app to view details and start download</p>
 </div>
 
-<div id="apps-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+<!-- ==================== 2. DETAILS VIEW ==================== -->
+<div id="view-details" class="view-section hidden">
+<section class="max-w-7xl mx-auto px-4 py-10">
+  <div class="text-center max-w-xl mx-auto mb-10">
+    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill text-[10px] font-bold tracking-widest uppercase text-purple-300 border-purple-400/30 mb-2">
+      Artistic Engineering
+    </div>
+    <h2 class="font-display text-2xl md:text-4xl font-bold tracking-tight text-white">Why Metyb?</h2>
+    <p class="text-white/60 text-xs md:text-sm mt-2">A combination of design and performance you've never felt before.</p>
+  </div>
 
-<div id="apps-empty" class="empty-state hidden">
-<i data-lucide="package-open" class="w-8 h-8 mx-auto mb-3"></i>
-<h3 class="font-display text-base font-bold text-white mb-1">No apps yet</h3>
-<p class="text-white/50 text-[11px]">Apps added from the admin panel will appear here in real-time.</p>
-</div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+    <div class="md:col-span-2 glass-base rounded-[24px] p-6 md:p-8 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+      <div class="absolute -right-10 -bottom-10 w-44 h-44 bg-violet-600/20 rounded-full blur-3xl group-hover:scale-150 transition-all duration-500"></div>
+      <div class="w-12 h-12 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white mb-5">
+        <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
+      </div>
+      <h3 class="font-display text-xl font-bold text-white mb-2">Safe & 100% Verified</h3>
+      <p class="text-white/70 text-xs md:text-sm max-w-lg leading-relaxed mb-6">
+        Every package is verified with digital signature. No trackers or unnecessary permissions. Clean and fully secure codebase.
+      </p>
+      <div class="flex items-center gap-6 pt-4 border-t border-white/10">
+        <div>
+          <div class="font-display text-2xl font-bold text-white" id="stat-malware">0</div>
+          <div class="text-[11px] text-white/50">Malware Threats</div>
+        </div>
+        <div class="w-px h-8 bg-white/10"></div>
+        <div>
+          <div class="font-display text-2xl font-bold text-white" id="stat-privacy">99%</div>
+          <div class="text-[11px] text-white/50">Privacy First</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-base rounded-[24px] p-6 md:p-8 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/20 rounded-full blur-2xl"></div>
+      <div class="w-12 h-12 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white mb-5">
+        <i data-lucide="zap" class="w-5 h-5 text-cyan-400"></i>
+      </div>
+      <h3 class="font-display text-lg font-bold text-white mb-2">Lightning Fast</h3>
+      <p class="text-white/70 text-xs leading-relaxed">
+        Zero lag, lightweight build and super-optimized architecture that responds in seconds.
+      </p>
+    </div>
+
+    <div class="glass-base rounded-[24px] p-6 md:p-8 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+      <div class="w-12 h-12 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white mb-5">
+        <i data-lucide="sparkles" class="w-5 h-5 text-fuchsia-400"></i>
+      </div>
+      <h3 class="font-display text-lg font-bold text-white mb-2">Built for Artists</h3>
+      <p class="text-white/70 text-xs leading-relaxed">
+        Pixel-perfect look and glass art finish designed for modern UI designers and creators.
+      </p>
+    </div>
+
+    <div class="md:col-span-2 glass-base rounded-[24px] p-6 md:p-8 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+      <div>
+        <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider">Growth & Trust</span>
+        <h3 class="font-display text-xl font-bold text-white mt-1">Community Driven Ecosystem</h3>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
+        <div class="glass-pill p-3.5 rounded-2xl text-center">
+          <div class="font-display text-xl md:text-2xl font-bold text-white" id="stat-downloads">0</div>
+          <div class="text-[10px] text-white/50 mt-1 uppercase">Downloads</div>
+        </div>
+        <div class="glass-pill p-3.5 rounded-2xl text-center">
+          <div class="font-display text-xl md:text-2xl font-bold text-white" id="stat-rating">0★</div>
+          <div class="text-[10px] text-white/50 mt-1 uppercase">Rating</div>
+        </div>
+        <div class="glass-pill p-3.5 rounded-2xl text-center">
+          <div class="font-display text-xl md:text-2xl font-bold text-white" id="stat-uptime">98%</div>
+          <div class="text-[10px] text-white/50 mt-1 uppercase">Uptime</div>
+        </div>
+        <div class="glass-pill p-3.5 rounded-2xl text-center">
+          <div class="font-display text-xl md:text-2xl font-bold text-white" id="stat-apps">0</div>
+          <div class="text-[10px] text-white/50 mt-1 uppercase">Glass Apps</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
-
-<!-- ==================== REVIEW SECTION ==================== -->
-<section id="review" class="max-w-7xl mx-auto px-4 py-12 scroll-mt-16">
-<div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-8">
-<div>
-<div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full glass-pill text-[9px] font-bold tracking-widest uppercase text-amber-300 border-amber-400/30 mb-1.5">
-★ <span id="review-avg">0</span>/5 RATING
-</div>
-<h2 class="font-display text-xl md:text-2xl font-bold tracking-tight text-white">Loved by Artists</h2>
-</div>
-<p class="text-white/60 text-[11px] max-w-md">See what creators and designers around the world are saying</p>
 </div>
 
-<div id="reviews-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+<!-- ==================== 3. REVIEW VIEW ==================== -->
+<div id="view-review" class="view-section hidden">
+<section class="max-w-7xl mx-auto px-4 py-10">
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+    <div>
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill text-[10px] font-bold tracking-widest uppercase text-amber-300 border-amber-400/30 mb-2">
+        ★ <span id="review-avg">0</span>/5 RATING
+      </div>
+      <h2 class="font-display text-2xl md:text-4xl font-bold tracking-tight text-white">Loved by Artists</h2>
+    </div>
+    <p class="text-white/60 text-xs md:text-sm max-w-md">See what creators, influencers and designers around the world are saying</p>
+  </div>
 
-<div id="reviews-empty" class="empty-state hidden">
-<i data-lucide="message-square-dashed" class="w-8 h-8 mx-auto mb-3"></i>
-<h3 class="font-display text-base font-bold text-white mb-1">No reviews yet</h3>
-<p class="text-white/50 text-[11px]">Reviews added from the user panel will appear here in real-time.</p>
-</div>
+  <div id="reviews-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+
+  <div id="reviews-empty" class="empty-state hidden">
+    <i data-lucide="message-square-dashed" class="w-10 h-10 mx-auto mb-3"></i>
+    <h3 class="font-display text-base font-bold text-white mb-1">No reviews yet</h3>
+    <p class="text-white/50 text-xs">Reviews added from the user panel will appear here in real-time.</p>
+  </div>
 </section>
-
-<!-- ==================== DETAILS SECTION ==================== -->
-<section id="details" class="max-w-7xl mx-auto px-4 py-12 scroll-mt-16">
-<div class="text-center max-w-xl mx-auto mb-8">
-<div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full glass-pill text-[9px] font-bold tracking-widest uppercase text-purple-300 border-purple-400/30 mb-2">
-Artistic Engineering
-</div>
-<h2 class="font-display text-xl md:text-3xl font-bold tracking-tight text-white">Why Metyb?</h2>
-<p class="text-white/60 text-[11px] md:text-xs mt-1.5">A combination of design and performance you've never felt before.</p>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- ==================== 4. DOWNLOAD VIEW ==================== -->
+<div id="view-download" class="view-section hidden">
+<section class="max-w-7xl mx-auto px-4 py-10">
+  <div class="mb-8">
+    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill text-[10px] font-bold tracking-widest uppercase text-cyan-300 border-cyan-400/30 mb-2">
+      2026 DROP
+    </div>
+    <h2 class="font-display text-2xl md:text-4xl font-bold tracking-tight text-white">App Collection</h2>
+    <p class="text-white/60 text-xs md:text-sm mt-1">Click any application card below to view details and start download instantly</p>
+  </div>
 
-<div class="md:col-span-2 glass-base rounded-[20px] p-5 md:p-6 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
-<div class="absolute -right-10 -bottom-10 w-40 h-40 bg-violet-600/20 rounded-full blur-3xl group-hover:scale-150 transition-all duration-500"></div>
-<div class="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white mb-4">
-<i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
-</div>
-<h3 class="font-display text-lg font-bold text-white mb-1.5">Safe & 100% Verified</h3>
-<p class="text-white/70 text-[11px] max-w-md leading-relaxed mb-4">
-Every package is verified with digital signature. No trackers or unnecessary permissions. Clean and fully secure codebase.
-</p>
-<div class="flex items-center gap-4 pt-3 border-t border-white/10">
-<div>
-<div class="font-display text-lg font-bold text-white" id="stat-malware">0</div>
-<div class="text-[10px] text-white/50">Malware Threats</div>
-</div>
-<div class="w-px h-7 bg-white/10"></div>
-<div>
-<div class="font-display text-lg font-bold text-white" id="stat-privacy">99%</div>
-<div class="text-[10px] text-white/50">Privacy First</div>
-</div>
-</div>
-</div>
+  <div id="apps-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
 
-<div class="glass-base rounded-[20px] p-5 md:p-6 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
-<div class="absolute top-0 right-0 w-28 h-28 bg-cyan-500/20 rounded-full blur-2xl"></div>
-<div class="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white mb-4">
-<i data-lucide="zap" class="w-4 h-4 text-cyan-400"></i>
-</div>
-<h3 class="font-display text-base font-bold text-white mb-1.5">Lightning Fast</h3>
-<p class="text-white/70 text-[11px] leading-relaxed">
-Zero lag, lightweight build and super-optimized architecture that responds in seconds.
-</p>
-</div>
-
-<div class="glass-base rounded-[20px] p-5 md:p-6 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
-<div class="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white mb-4">
-<i data-lucide="sparkles" class="w-4 h-4 text-fuchsia-400"></i>
-</div>
-<h3 class="font-display text-base font-bold text-white mb-1.5">Built for Artists</h3>
-<p class="text-white/70 text-[11px] leading-relaxed">
-Pixel-perfect look and glass art finish designed for modern UI designers and creators.
-</p>
-</div>
-
-<div class="md:col-span-2 glass-base rounded-[20px] p-5 md:p-6 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
-<div>
-<span class="text-[9px] font-bold text-amber-400 uppercase tracking-wider">Growth & Trust</span>
-<h3 class="font-display text-lg font-bold text-white mt-1">Community Driven Ecosystem</h3>
-</div>
-<div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4">
-<div class="glass-pill p-2.5 rounded-xl text-center">
-<div class="font-display text-lg md:text-xl font-bold text-white" id="stat-downloads">0</div>
-<div class="text-[9px] text-white/50 mt-0.5 uppercase">Downloads</div>
-</div>
-<div class="glass-pill p-2.5 rounded-xl text-center">
-<div class="font-display text-lg md:text-xl font-bold text-white" id="stat-rating">0★</div>
-<div class="text-[9px] text-white/50 mt-0.5 uppercase">Rating</div>
-</div>
-<div class="glass-pill p-2.5 rounded-xl text-center">
-<div class="font-display text-lg md:text-xl font-bold text-white" id="stat-uptime">98%</div>
-<div class="text-[9px] text-white/50 mt-0.5 uppercase">Uptime</div>
-</div>
-<div class="glass-pill p-2.5 rounded-xl text-center">
-<div class="font-display text-lg md:text-xl font-bold text-white" id="stat-apps">0</div>
-<div class="text-[9px] text-white/50 mt-0.5 uppercase">Glass Apps</div>
-</div>
-</div>
-</div>
-</div>
-
-<div class="mt-12">
-<div class="text-center mb-8">
-<div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full glass-pill text-[9px] font-bold tracking-widest uppercase text-emerald-300 border-emerald-400/30 mb-2">
-Meet the Team
-</div>
-<h3 class="font-display text-xl md:text-2xl font-bold tracking-tight text-white">Developers Behind Metyb</h3>
-</div>
-
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
-
-<div class="glass-base rounded-[26px] p-7 text-center hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
-<div class="absolute -top-12 -right-12 w-40 h-40 bg-violet-600/25 rounded-full blur-3xl"></div>
-<div class="flex justify-center mb-5">
-<img src="W.K.JPG" alt="Wolf King"
-class="dev-img"
-onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a24%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2258%22 font-size=%2234%22 fill=%22%23a78bfa%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-weight=%22bold%22>WK</text></svg>'" />
-</div>
-<h4 class="font-display text-lg font-bold text-white">Wolf King</h4>
-<p class="text-[12px] text-violet-300 mt-1.5">Frontend Designer & Code Editor Developer</p>
-<p class="text-[11px] text-white/55 mt-3 flex items-center justify-center gap-1.5">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-Live in India
-</p>
-</div>
-
-<div class="glass-base rounded-[26px] p-7 text-center hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
-<div class="absolute -top-12 -right-12 w-40 h-40 bg-fuchsia-600/25 rounded-full blur-3xl"></div>
-<div class="flex justify-center mb-5">
-<img src="W.Q.JPG" alt="Wolf Queen"
-class="dev-img"
-onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a24%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2258%22 font-size=%2234%22 fill=%22%23f0abfc%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-weight=%22bold%22>WQ</text></svg>'" />
-</div>
-<h4 class="font-display text-lg font-bold text-white">Wolf Queen</h4>
-<p class="text-[12px] text-fuchsia-300 mt-1.5">Backend Designer & Code Editor Developer</p>
-<p class="text-[11px] text-white/55 mt-3 flex items-center justify-center gap-1.5">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-Live in India
-</p>
-</div>
-
-</div>
-</div>
+  <div id="apps-empty" class="empty-state hidden">
+    <i data-lucide="package-open" class="w-10 h-10 mx-auto mb-3"></i>
+    <h3 class="font-display text-base font-bold text-white mb-1">No apps yet</h3>
+    <p class="text-white/50 text-xs">Apps added from the admin panel will appear here in real-time.</p>
+  </div>
 </section>
+</div>
+
+<!-- ==================== 5. CONNECT VIEW ==================== -->
+<div id="view-connect" class="view-section hidden">
+<section class="max-w-4xl mx-auto px-4 py-10">
+  <div class="text-center mb-10">
+    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill text-[10px] font-semibold text-cyan-300 border-cyan-400/30 mb-3">
+      <i data-lucide="mail" class="w-3.5 h-3.5"></i><span>Get in Touch</span>
+    </div>
+    <h1 class="font-display font-extrabold text-3xl md:text-4xl tracking-tight leading-[1.12] mb-3">
+      <span class="text-white">Connect</span>
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-300">With Us</span>
+    </h1>
+    <p class="text-white/70 text-xs md:text-sm max-w-lg mx-auto leading-relaxed">
+      Connect with us through any of the platforms below. We're active across all major social channels and always happy to hear from you.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    
+    <!-- Company Email -> kingbicchu@gmail.com -->
+    <div class="glass-pill rounded-2xl p-5 text-center">
+      <div class="w-12 h-12 mx-auto rounded-xl overflow-hidden bg-white/10 border border-white/20 flex items-center justify-center mb-3">
+        <img src="img/K.B.JPG" alt="King Bicchu" class="w-full h-full object-cover"
+        onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-violet-500 to-fuchsia-500 flex items-center justify-center text-[11px] font-bold text-white\'>KB</div>'" />
+      </div>
+      <div class="text-[10px] text-white/50 uppercase tracking-wider mb-1">Company Email</div>
+      <div class="text-xs font-semibold text-white break-all">
+        <a href="mailto:kingbicchu@gmail.com" class="hover:text-cyan-300 transition-colors">kingbicchu@gmail.com</a>
+      </div>
+    </div>
+
+    <!-- Company Name -->
+    <div class="glass-pill rounded-2xl p-5 text-center">
+      <div class="w-12 h-12 mx-auto rounded-xl overflow-hidden bg-white/10 border border-white/20 flex items-center justify-center mb-3">
+        <img src="img/K.B.JPG" alt="King Bicchu Company" class="w-full h-full object-cover"
+        onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-violet-500 to-fuchsia-500 flex items-center justify-center text-[11px] font-bold text-white\'>KB</div>'" />
+      </div>
+      <div class="text-[10px] text-white/50 uppercase tracking-wider mb-1">Company</div>
+      <div class="text-xs font-semibold text-white">King Bicchu</div>
+    </div>
+
+    <!-- App Email -> metyb.k.b@gmail.com -->
+    <div class="glass-pill rounded-2xl p-5 text-center">
+      <div class="w-12 h-12 mx-auto rounded-xl overflow-hidden bg-white/10 border border-white/20 flex items-center justify-center mb-3">
+        <img src="img/p.png" alt="Metyb App" class="w-full h-full object-contain p-1"
+        onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-cyan-400 to-violet-500 flex items-center justify-center text-[11px] font-bold text-white\'>M</div>'" />
+      </div>
+      <div class="text-[10px] text-white/50 uppercase tracking-wider mb-1">App Email</div>
+      <div class="text-xs font-semibold text-white break-all">
+        <a href="mailto:metyb.k.b@gmail.com" class="hover:text-cyan-300 transition-colors">metyb.k.b@gmail.com</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="glass-base rounded-[26px] p-6 md:p-8 relative overflow-hidden">
+    <div class="absolute -top-20 -right-20 w-60 h-60 bg-violet-600/20 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-20 -left-20 w-60 h-60 bg-fuchsia-600/15 rounded-full blur-3xl"></div>
+    <div class="relative z-10">
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill text-[10px] font-semibold text-fuchsia-300 border-fuchsia-400/30 mb-2">
+          <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+          <span>Follow Us</span>
+        </div>
+        <h3 class="font-display text-lg md:text-xl font-bold text-white">Connect Across Channels</h3>
+        <p class="text-white/60 text-xs mt-1">Stay updated with our latest drops, updates and announcements</p>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5 max-w-2xl mx-auto">
+        <a href="https://youtube.com/@metybe_k.b?si=VrRVNXLD8UwTWoW4" target="_blank" rel="noopener"
+        class="glass-base rounded-2xl p-3.5 flex flex-col items-center gap-2 hover:-translate-y-1 hover:border-red-400/40 transition-all duration-300 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-600 to-red-500 flex items-center justify-center shadow-lg shadow-red-500/30 group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M23.5 6.2c-.3-1.2-1.2-2.1-2.4-2.4C19 3.2 12 3.2 12 3.2s-7 0-9.1.6C1.7 4.1.8 5 .5 6.2 0 8.3 0 12 0 12s0 3.7.5 5.8c.3 1.2 1.2 2.1 2.4 2.4 2.1.6 9.1.6 9.1.6s7 0 9.1-.6c1.2-.3 2.1-1.2 2.4-2.4.5-2.1.5-5.8.5-5.8s0-3.7-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg>
+          </div>
+          <span class="text-[10px] font-semibold text-white/80 group-hover:text-white">YouTube</span>
+        </a>
+
+        <a href="https://www.facebook.com/share/1CuZigeNTu/" target="_blank" rel="noopener"
+        class="glass-base rounded-2xl p-3.5 flex flex-col items-center gap-2 hover:-translate-y-1 hover:border-blue-400/40 transition-all duration-300 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </div>
+          <span class="text-[10px] font-semibold text-white/80 group-hover:text-white">Facebook</span>
+        </a>
+
+        <a href="https://www.instagram.com/metyb_k.b?exln=MWhzNTQzOWVhbXhheQ==" target="_blank" rel="noopener"
+        class="glass-base rounded-2xl p-3.5 flex flex-col items-center gap-2 hover:-translate-y-1 hover:border-pink-400/40 transition-all duration-300 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex items-center justify-center shadow-lg shadow-pink-500/30 group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </div>
+          <span class="text-[10px] font-semibold text-white/80 group-hover:text-white">Instagram</span>
+        </a>
+
+        <a href="https://x.com/Metyb_" target="_blank" rel="noopener"
+        class="glass-base rounded-2xl p-3.5 flex flex-col items-center gap-2 hover:-translate-y-1 hover:border-white/40 transition-all duration-300 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-zinc-800 to-black border border-white/20 flex items-center justify-center shadow-lg shadow-white/10 group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </div>
+          <span class="text-[10px] font-semibold text-white/80 group-hover:text-white">X</span>
+        </a>
+
+        <a href="mailto:metyb.k.b@gmail.com"
+        class="glass-base rounded-2xl p-3.5 flex flex-col items-center gap-2 hover:-translate-y-1 hover:border-emerald-400/40 transition-all duration-300 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+          </div>
+          <span class="text-[10px] font-semibold text-white/80 group-hover:text-white">Email</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- ==================== 6. PRIVATE POLICY VIEW ==================== -->
+<div id="view-privacy" class="view-section hidden">
+<section class="max-w-4xl mx-auto px-4 py-10">
+  <div class="text-center mb-10">
+    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill text-[10px] font-semibold text-emerald-300 border-emerald-400/30 mb-3">
+      <i data-lucide="shield-check" class="w-3.5 h-3.5"></i><span>Your Privacy Matters</span>
+    </div>
+    <h1 class="font-display font-extrabold text-3xl md:text-4xl tracking-tight leading-[1.12] mb-3">
+      <span class="text-white">Private</span>
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-300">Policy</span>
+    </h1>
+    <p class="text-white/70 text-xs md:text-sm max-w-lg mx-auto leading-relaxed">
+      Last Updated: 19/09/2026 — This Privacy Policy explains how Metyb collects, uses, and protects your information.
+    </p>
+  </div>
+
+  <div class="glass-base rounded-[26px] p-6 md:p-8 relative overflow-hidden space-y-6">
+    <div class="absolute -top-20 -right-20 w-60 h-60 bg-emerald-600/15 rounded-full blur-3xl"></div>
+
+    <div>
+      <h2 class="font-display text-base md:text-lg font-bold text-white mb-2 flex items-center gap-2">
+        <span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-cyan-400">1</span>
+        Introduction
+      </h2>
+      <p class="text-white/70 text-xs leading-relaxed">
+        This Privacy Policy applies to Metyb. We respect your privacy. By using the app, you agree to this policy.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="font-display text-base md:text-lg font-bold text-white mb-2 flex items-center gap-2">
+        <span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-fuchsia-400">2</span>
+        Information We Collect
+      </h2>
+      <ul class="text-white/70 text-xs leading-relaxed space-y-1 list-disc list-inside">
+        <li>Your email address (e.g., for login)</li>
+        <li>Your social media usernames:
+          <ul class="list-[circle] list-inside ml-4 mt-1 space-y-0.5 text-white/60">
+            <li>Facebook username</li>
+            <li>Instagram username</li>
+            <li>YouTube channel/username</li>
+          </ul>
+        </li>
+        <li>Payment-related information: Transaction ID, payment gateway details</li>
+        <li>Device-related information: Device model, OS version</li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="font-display text-base md:text-lg font-bold text-white mb-2 flex items-center gap-2">
+        <span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-violet-400">3</span>
+        Information We Do Not Collect
+      </h2>
+      <ul class="text-white/70 text-xs leading-relaxed space-y-1 list-disc list-inside">
+        <li>We do not collect phone numbers</li>
+        <li>We do not collect passwords for Facebook, Instagram, or YouTube</li>
+        <li>We do not collect any information related to Telegram</li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="font-display text-base md:text-lg font-bold text-white mb-2 flex items-center gap-2">
+        <span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-amber-400">4</span>
+        Payment and Charges Policy
+      </h2>
+      <ul class="text-white/70 text-xs leading-relaxed space-y-1 list-disc list-inside">
+        <li>All payments are processed via 100% safe and secure third-party gateways (e.g., Google Pay, QR, Paytm).</li>
+        <li>When you recharge, a <span class="font-semibold text-white">20% service charge</span> is deducted from the total recharge amount.</li>
+        <li>The remaining <span class="font-semibold text-white">80%</span> is added to your Metyb wallet.</li>
+        <li>You can use this 80% balance for boosts and other features within the app.</li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="font-display text-base md:text-lg font-bold text-white mb-2 flex items-center gap-2">
+        <span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-emerald-400">5</span>
+        Refund Policy
+      </h2>
+      <ul class="text-white/70 text-xs leading-relaxed space-y-1 list-disc list-inside">
+        <li>If the payment is successful but the funds are not added to your wallet, and you provide valid proof (screenshot/Transaction ID), the full amount will be refunded.</li>
+        <li>If a boost or service is not delivered, the full amount for that order will be refunded to your wallet.</li>
+        <li>For refunds, contact: <a href="mailto:metyb.k.b@gmail.com" class="text-cyan-300 hover:underline font-semibold">metyb.k.b@gmail.com</a></li>
+        <li>Refunds will be processed within 5–7 working days.</li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="font-display text-base md:text-lg font-bold text-white mb-2 flex items-center gap-2">
+        <span class="w-6 h-6 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-cyan-400">6</span>
+        Data Sharing & Security
+      </h2>
+      <ul class="text-white/70 text-xs leading-relaxed space-y-1 list-disc list-inside">
+        <li>We do not sell any of your personal information to third parties.</li>
+        <li>Standard encrypted security protocols are used to ensure maximum confidentiality.</li>
+        <li>We never ask for or store your social media account passwords.</li>
+      </ul>
+    </div>
+
+    <div class="glass-pill rounded-xl p-4">
+      <p class="text-xs text-white/70 leading-relaxed">
+        <span class="font-semibold text-cyan-300">Questions or refunds?</span>
+        Email us directly at <a href="mailto:metyb.k.b@gmail.com" class="text-cyan-300 hover:underline font-semibold">metyb.k.b@gmail.com</a>.
+      </p>
+    </div>
+
+  </div>
+</section>
+</div>
+
+<!-- ==================== 7. SUPPORT VIEW ==================== -->
+<div id="view-support" class="view-section hidden">
+<section class="max-w-4xl mx-auto px-4 py-10">
+  <div class="text-center mb-10">
+    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill text-[10px] font-semibold text-amber-300 border-amber-400/30 mb-3">
+      <i data-lucide="life-buoy" class="w-3.5 h-3.5"></i><span>We're Here to Help</span>
+    </div>
+    <h1 class="font-display font-extrabold text-3xl md:text-4xl tracking-tight leading-[1.12] mb-3">
+      <span class="text-white">Support</span>
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-300">Center</span>
+    </h1>
+    <p class="text-white/70 text-xs md:text-sm max-w-lg mx-auto leading-relaxed">
+      Find answers to frequently asked questions or reach out to our support team directly. We're always ready to assist you.
+    </p>
+  </div>
+
+  <div class="glass-base rounded-[26px] p-6 md:p-8 mb-6 relative overflow-hidden text-center">
+    <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-tr from-emerald-500 to-cyan-400 flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/30">
+      <i data-lucide="life-buoy" class="w-6 h-6 text-white"></i>
+    </div>
+    <h2 class="font-display text-xl md:text-2xl font-bold text-white mb-2">We're Here for You — 24/7</h2>
+    <p class="text-white/70 text-xs max-w-lg mx-auto leading-relaxed mb-5">
+      Whether it's a bug, a feature request, or just a friendly hello — our team replies to every message within 24 hours. Your experience matters to us.
+    </p>
+
+    <a href="mailto:metyb.k.b@gmail.com"
+    class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white text-black font-bold text-xs shadow-lg hover:scale-105 active:scale-95 transition-transform">
+      <i data-lucide="mail" class="w-4 h-4"></i>
+      <span>metyb.k.b@gmail.com</span>
+    </a>
+
+    <div class="mt-5 flex flex-wrap items-center justify-center gap-3 text-[10px] text-white/60">
+      <span class="glass-pill px-3 py-1 rounded-full flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+        Online Now
+      </span>
+      <span class="glass-pill px-3 py-1 rounded-full flex items-center gap-1.5">
+        <i data-lucide="clock" class="w-3 h-3 text-cyan-400"></i>
+        Avg. reply: under 6 hours
+      </span>
+      <span class="glass-pill px-3 py-1 rounded-full flex items-center gap-1.5">
+        <i data-lucide="shield-check" class="w-3 h-3 text-emerald-400"></i>
+        100% Free Support
+      </span>
+    </div>
+  </div>
+
+  <div class="glass-base rounded-[26px] p-6 md:p-8 relative overflow-hidden">
+    <h2 class="font-display text-lg font-bold text-white mb-4 flex items-center gap-2">
+      <i data-lucide="help-circle" class="w-4 h-4 text-cyan-400"></i>
+      Frequently Asked Questions
+    </h2>
+
+    <div class="space-y-2">
+      <div class="faq-item glass-pill rounded-xl overflow-hidden border border-white/10">
+        <button class="faq-toggle w-full text-left px-4 py-3 flex items-center justify-between gap-3">
+          <span class="text-xs font-semibold text-white/90">How do I download an app from Metyb?</span>
+          <i data-lucide="chevron-down" class="faq-icon w-3.5 h-3.5 text-white/50 shrink-0"></i>
+        </button>
+        <div class="faq-answer px-4 text-xs text-white/65 leading-relaxed">
+          Simply navigate to the Download tab, click on any app card to open its details modal, and click the "Download Now" button.
+        </div>
+      </div>
+
+      <div class="faq-item glass-pill rounded-xl overflow-hidden border border-white/10">
+        <button class="faq-toggle w-full text-left px-4 py-3 flex items-center justify-between gap-3">
+          <span class="text-xs font-semibold text-white/90">Are the apps safe to install?</span>
+          <i data-lucide="chevron-down" class="faq-icon w-3.5 h-3.5 text-white/50 shrink-0"></i>
+        </button>
+        <div class="faq-answer px-4 text-xs text-white/65 leading-relaxed">
+          Absolutely. Every app on Metyb undergoes strict verification and digital signature checks for 100% clean, safe downloads.
+        </div>
+      </div>
+
+      <div class="faq-item glass-pill rounded-xl overflow-hidden border border-white/10">
+        <button class="faq-toggle w-full text-left px-4 py-3 flex items-center justify-between gap-3">
+          <span class="text-xs font-semibold text-white/90">How do I request a refund?</span>
+          <i data-lucide="chevron-down" class="faq-icon w-3.5 h-3.5 text-white/50 shrink-0"></i>
+        </button>
+        <div class="faq-answer px-4 text-xs text-white/65 leading-relaxed">
+          For refunds, contact us at metyb.k.b@gmail.com with your Transaction ID and screenshot. Valid refunds are processed within 5–7 working days.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- ==================== 8. DEVELOPER VIEW (All Bengali Translated to English) ==================== -->
+<div id="view-developer" class="view-section hidden">
+<section class="max-w-6xl mx-auto px-4 py-10">
+  <div class="text-center mb-12">
+    <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full glass-pill text-[10px] font-bold tracking-widest uppercase text-emerald-300 border-emerald-400/30 mb-2">
+      Creator Profile
+    </div>
+    <h2 class="font-display text-3xl md:text-5xl font-bold tracking-tight text-white">Developer & Brand</h2>
+    <p class="text-white/60 text-xs sm:text-sm mt-2">Architect of innovative technologies and digital solutions.</p>
+  </div>
+
+  <div class="glass-base p-8 md:p-12 rounded-[32px] border border-white/20 shadow-2xl relative overflow-hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+      
+      <!-- বাম পাশের তথ্য: ডেভলপার নাম ও ব্র্যান্ড -->
+      <div class="flex flex-col justify-center space-y-6 text-left order-2 lg:order-1">
+        <div class="border-l-2 border-violet-500 pl-4">
+          <span class="text-[10px] uppercase tracking-wider text-violet-400 font-bold block mb-1">Lead Developer</span>
+          <h3 class="font-display text-2xl sm:text-3xl font-extrabold text-white">Wolf King</h3>
+          <p class="text-xs text-white/60 mt-0.5">Frontend Designer & Code Editor Developer</p>
+        </div>
+
+        <div class="border-l-2 border-fuchsia-500 pl-4">
+          <span class="text-[10px] uppercase tracking-wider text-fuchsia-400 font-bold block mb-1">Company & Brand</span>
+          <h4 class="font-display text-xl font-bold text-white">King Bicchu</h4>
+          <p class="text-xs text-white/60 mt-0.5">Innovative Digital Solutions & Mobile Apps</p>
+        </div>
+
+        <div class="glass-pill p-4 rounded-2xl border border-emerald-500/20">
+          <div class="flex items-center gap-2 text-emerald-400 text-xs font-semibold mb-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>Active Status</span>
+          </div>
+          <p class="text-[11px] text-white/80 leading-relaxed font-sans">
+            Operated from India and providing worldwide services.
+          </p>
+        </div>
+      </div>
+
+      <!-- মাঝখানের অংশ: ছবি -->
+      <div class="flex justify-center order-1 lg:order-2">
+        <div class="relative group">
+          <div class="absolute -inset-2 bg-gradient-to-r from-violet-600 via-fuchsia-600 to-cyan-500 rounded-[30px] blur-xl opacity-75 group-hover:opacity-100 transition duration-500"></div>
+          
+          <div class="relative w-64 h-80 sm:w-72 sm:h-96 rounded-[28px] overflow-hidden border-2 border-white/30 bg-[#14141e] shadow-2xl">
+            <img src="img/W.K.JPG" alt="Developer Wolf King" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-105"
+            onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 400%22><rect fill=%22%231a1a24%22 width=%22300%22 height=%22400%22/><text x=%2250%25%22 y=%2250%25%22 font-size=%2226%22 fill=%22%23a78bfa%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-weight=%22bold%22>Wolf King</text></svg>'" />
+            <div class="absolute inset-0 bg-gradient-to-t from-deepDark via-transparent to-transparent opacity-80"></div>
+            <div class="absolute bottom-4 left-4 right-4 text-center">
+              <span class="px-3.5 py-1 rounded-full glass-pill text-[10px] font-bold tracking-widest uppercase text-white/95">Founder & CEO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ডান পাশের তথ্য -->
+      <div class="flex flex-col justify-center space-y-6 text-left order-3">
+        <div class="border-l-2 border-cyan-500 pl-4">
+          <span class="text-[10px] uppercase tracking-wider text-cyan-400 font-bold block mb-1">App Overview</span>
+          <h3 class="font-display text-2xl font-bold text-white">Metyb Application</h3>
+          <p class="text-xs text-white/70 mt-1 leading-relaxed">
+            Metyb is a growth booster app designed for modern social media creators and influencers. An all-in-one platform built to enhance real audience engagement across Instagram, Facebook, and YouTube.
+          </p>
+        </div>
+
+        <div class="space-y-2 pt-1">
+          <div class="flex items-center gap-2 text-xs text-white/80">
+            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+            <span>Secure code & zero tracker policy</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-white/80">
+            <i data-lucide="check-circle" class="w-4 h-4 text-cyan-400 shrink-0"></i>
+            <span>Unique glass art & ultra-fast response</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-white/80">
+            <i data-lucide="check-circle" class="w-4 h-4 text-fuchsia-400 shrink-0"></i>
+            <span>Automated rewards & boosting features</span>
+          </div>
+        </div>
+
+        <div class="pt-1">
+          <button id="dev-try-apps-btn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500 text-white font-semibold text-xs hover:scale-105 transition-transform flex items-center gap-2">
+            <span>Try Metyb Apps</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+</div>
+
 </main>
 
-<!-- FOOTER -->
+<!-- ==================== FOOTER ==================== -->
 <footer class="mt-12 border-t border-white/10 py-6 glass-header text-center relative z-10">
 <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-<div class="flex items-center gap-2">
-<div class="w-5 h-5 rounded-md overflow-hidden bg-white/5 border border-white/10">
-<img src="WBL.JPG" alt="Metyb Logo" class="w-full h-full object-cover"
-onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-violet-500 to-cyan-400 flex items-center justify-center text-[9px] font-bold\'>M</div>'" />
-</div>
-<span class="text-[11px] font-semibold text-white/90">Metyb</span>
-<span class="text-[9px] text-white/40">• Powered by King Bicchu</span>
-</div>
-<p class="text-[9px] text-white/40">
-© 2026 Metyb — Powered by King Bicchu. Crafted with Neo-Artistic Precision.
-</p>
-<div class="flex items-center gap-3 text-[9px] text-white/60">
-<a href="#download" class="hover:text-white transition-colors">Apps</a>
-<span>•</span>
-<a href="#review" class="hover:text-white transition-colors">Reviews</a>
-<span>•</span>
-<a href="#details" class="hover:text-white transition-colors">Details</a>
-</div>
+  <div class="flex items-center gap-2">
+    <div class="w-5 h-5 rounded-md overflow-hidden bg-white/5 border border-white/10 p-0.5">
+      <img src="img/p.png" alt="Metyb Logo" class="w-full h-full object-contain"
+      onerror="this.outerHTML='<div class=\'w-full h-full bg-gradient-to-tr from-violet-500 to-cyan-400 flex items-center justify-center text-[9px] font-bold\'>M</div>'" />
+    </div>
+    <span class="text-[11px] font-semibold text-white/90">Metyb</span>
+    <span class="text-[9px] text-white/40">• Powered by King Bicchu</span>
+  </div>
+  <p class="text-[9px] text-white/40">
+    © 2026 Metyb — Powered by King Bicchu. Crafted with Neo-Artistic Precision.
+  </p>
+  <div class="flex items-center gap-3 text-[9px] text-white/60">
+    <a href="#download" data-nav="download" class="hover:text-white transition-colors">Apps</a>
+    <span>•</span>
+    <a href="#review" data-nav="review" class="hover:text-white transition-colors">Reviews</a>
+    <span>•</span>
+    <a href="#details" data-nav="details" class="hover:text-white transition-colors">Details</a>
+    <span>•</span>
+    <a href="#connect" data-nav="connect" class="hover:text-white transition-colors">Contact</a>
+    <span>•</span>
+    <a href="#privacy" data-nav="privacy" class="hover:text-white transition-colors">Privacy</a>
+    <span>•</span>
+    <a href="#support" data-nav="support" class="hover:text-white transition-colors">Support</a>
+    <span>•</span>
+    <a href="#developer" data-nav="developer" class="hover:text-white transition-colors">Developer</a>
+  </div>
 </div>
 </footer>
 
-<!-- APP DETAILS MODAL -->
+<!-- App Download Modal -->
 <div id="app-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-xl flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
-<div id="modal-box" class="glass-strong w-full max-w-2xl rounded-[24px] p-5 md:p-6 max-h-[90vh] overflow-y-auto transform scale-95 transition-all duration-300 relative border border-white/20">
-<button id="modal-close-btn" class="absolute top-4 right-4 p-1.5 rounded-full glass-pill text-white/70 hover:text-white transition-colors">
-<i data-lucide="x" class="w-3.5 h-3.5"></i>
-</button>
-<div id="modal-dynamic-content"></div>
-</div>
+  <div id="modal-box" class="glass-strong w-full max-w-2xl rounded-[24px] p-5 md:p-6 max-h-[90vh] overflow-y-auto transform scale-95 transition-all duration-300 relative border border-white/20">
+    <button id="modal-close-btn" class="absolute top-4 right-4 p-1.5 rounded-full glass-pill text-white/70 hover:text-white transition-colors">
+      <i data-lucide="x" class="w-3.5 h-3.5"></i>
+    </button>
+    <div id="modal-dynamic-content"></div>
+  </div>
 </div>
 
-<!-- DOWNLOAD TOAST -->
+<!-- Download Progress Toast -->
 <div id="download-toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 w-[min(92vw,380px)] glass-strong rounded-xl p-3.5 border border-white/20 shadow-2xl transition-all duration-300 translate-y-24 opacity-0 pointer-events-none">
-<div class="flex items-center gap-3">
-<div class="w-9 h-9 rounded-lg bg-gradient-to-br from-violet-500 to-cyan-400 flex items-center justify-center font-bold text-white shrink-0">
-<i data-lucide="download" class="w-3.5 h-3.5"></i>
-</div>
-<div class="flex-1 min-w-0">
-<div class="flex justify-between items-center mb-1">
-<h5 id="toast-title" class="text-[10px] font-bold text-white truncate">Downloading...</h5>
-<span id="toast-percent" class="text-[10px] font-bold text-cyan-300">0%</span>
-</div>
-<div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
-<div id="toast-progress-bar" class="h-full bg-gradient-to-r from-violet-400 to-cyan-400 w-0 transition-all duration-150"></div>
-</div>
-</div>
-</div>
+  <div class="flex items-center gap-3">
+    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-violet-500 to-cyan-400 flex items-center justify-center font-bold text-white shrink-0">
+      <i data-lucide="download" class="w-3.5 h-3.5"></i>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="flex justify-between items-center mb-1">
+        <h5 id="toast-title" class="text-[10px] font-bold text-white truncate">Downloading...</h5>
+        <span id="toast-percent" class="text-[10px] font-bold text-cyan-300">0%</span>
+      </div>
+      <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+        <div id="toast-progress-bar" class="h-full bg-gradient-to-r from-violet-400 to-cyan-400 w-0 transition-all duration-150"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- ==================== APP LOGIC ==================== -->
+<!-- Scripts -->
 <script>
-window.addEventListener("load", () => {
-setTimeout(() => {
-const splash = document.getElementById("splash-screen");
-if (splash) {
-splash.classList.add("fade-out");
-setTimeout(() => splash.remove(), 700);
+function safeCreateIcons() {
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    try { window.lucide.createIcons(); } catch (e) {}
+  }
 }
-}, 3000);
+
+function safeConfetti(opts) {
+  if (typeof window.confetti === 'function') {
+    try { window.confetti(opts); } catch (e) {}
+  }
+}
+
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    const splash = document.getElementById("splash-screen");
+    if (splash) {
+      splash.classList.add("fade-out");
+      setTimeout(() => splash.remove(), 700);
+    }
+  }, 2600);
 });
 
 let APPS = [];
 let REVIEWS = [];
-let STATS = {
-downloads: 0,
-rating: 0,
-uptime: 98,
-malware: 0,
-privacy: 99,
-apps: 0,
-reviewAvg: 0
-};
+let STATS = { downloads: 0, rating: 0, uptime: 98, malware: 0, privacy: 99, apps: 0, reviewAvg: 0 };
 let BANNER = { imageUrl: "", title: "", description: "", badge: "" };
 
 const DEFAULT_GRADIENTS = [
-"from-violet-500 via-fuchsia-500 to-indigo-500",
-"from-cyan-400 via-sky-400 to-blue-500",
-"from-amber-300 via-orange-400 to-pink-500",
-"from-emerald-300 via-teal-400 to-cyan-500",
-"from-fuchsia-400 via-purple-500 to-violet-600",
-"from-zinc-200 via-zinc-300 to-zinc-400"
+  "from-violet-500 via-fuchsia-500 to-indigo-500",
+  "from-cyan-400 via-sky-400 to-blue-500",
+  "from-amber-300 via-orange-400 to-pink-500",
+  "from-emerald-300 via-teal-400 to-cyan-500",
+  "from-fuchsia-400 via-purple-500 to-violet-600",
+  "from-zinc-200 via-zinc-300 to-zinc-400"
 ];
 
 const AVATAR_COLORS = [
-"text-fuchsia-300",
-"text-cyan-300",
-"text-amber-300",
-"text-emerald-300",
-"text-violet-300",
-"text-pink-300"
+  "text-fuchsia-300","text-cyan-300","text-amber-300",
+  "text-emerald-300","text-violet-300","text-pink-300"
 ];
 
 function resolveImageUrl(raw) {
-if (!raw) return "";
-const s = String(raw).trim();
-if (!s) return "";
-if (/^(https?:|data:|blob:)/i.test(s)) return s;
-if (s.startsWith("supabase:")) {
-const path = s.slice("supabase:".length).replace(/^\/+/, "");
-return (window.__supabaseHelpers && window.__supabaseHelpers.publicUrl)
-? window.__supabaseHelpers.publicUrl(path)
-: "";
-}
-if (s.includes("storage/v1/object")) return s;
-return s;
+  if (!raw) return "";
+  const s = String(raw).trim();
+  if (!s) return "";
+  if (/^(https?:|data:|blob:)/i.test(s)) return s;
+  if (s.startsWith("supabase:")) {
+    const path = s.slice("supabase:".length).replace(/^\/+/, "");
+    return (window.__supabaseHelpers && window.__supabaseHelpers.publicUrl)
+      ? window.__supabaseHelpers.publicUrl(path)
+      : "";
+  }
+  return s;
 }
 
 function getInitials(name) {
-if (!name) return "AN";
-return String(name).trim().split(/\s+/).map(n => n[0]).slice(0, 2).join("").toUpperCase() || "AN";
+  if (!name) return "AN";
+  return String(name).trim().split(/\s+/).map(n => n[0]).slice(0, 2).join("").toUpperCase() || "AN";
 }
 
 function getAvatarColor(uid) {
-if (!uid) return AVATAR_COLORS[0];
-let sum = 0;
-for (let i = 0; i < uid.length; i++) sum += uid.charCodeAt(i);
-return AVATAR_COLORS[sum % AVATAR_COLORS.length];
+  if (!uid) return AVATAR_COLORS[0];
+  let sum = 0;
+  for (let i = 0; i < uid.length; i++) sum += uid.charCodeAt(i);
+  return AVATAR_COLORS[sum % AVATAR_COLORS.length];
 }
 
 function formatReviewDate(ts) {
-if (!ts) return "";
-const d = new Date(Number(ts));
-if (isNaN(d.getTime())) return "";
-const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-return `${d.getDate().toString().padStart(2,"0")} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  if (!ts) return "";
+  const d = new Date(Number(ts));
+  if (isNaN(d.getTime())) return "";
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  return `${d.getDate().toString().padStart(2,"0")} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
 
 function buildReviewText(r) {
-const parts = [];
-if (r.selectedOption) parts.push(r.selectedOption);
-if (r.customText) parts.push(r.customText);
-return parts.join(" — ") || "";
+  const parts = [];
+  if (r.selectedOption) parts.push(r.selectedOption);
+  if (r.customText) parts.push(r.customText);
+  return parts.join(" — ") || "";
 }
 
 function escapeHtml(s) {
-if (s == null) return "";
-return String(s)
-.replace(/&/g, "&amp;")
-.replace(/</g, "&lt;")
-.replace(/>/g, "&gt;")
-.replace(/"/g, "&quot;")
-.replace(/'/g, "&#39;");
+  if (s == null) return "";
+  return String(s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
 function initFirebaseListeners() {
-const fb = window.__fb;
-if (!fb) return false;
-const { db, ref, onValue } = fb;
+  const fb = window.__fb;
+  if (!fb) return false;
+  const { db, ref, onValue } = fb;
 
-// apps listener with full fallback to legacy keys and lock support
-onValue(ref(db, "apps"), (snap) => {
-const val = snap.val() || {};
-APPS = Object.entries(val).map(([id, v]) => {
-const rawFeatures = Array.isArray(v.features) ? v.features : (Array.isArray(v.highlights) ? v.highlights : []);
-const rawScreenshots = Array.isArray(v.screenshots) ? v.screenshots : (Array.isArray(v.screenshotUrls) ? v.screenshotUrls : []);
+  onValue(ref(db, "apps"), (snap) => {
+    const val = snap.val() || {};
+    APPS = Object.entries(val).map(([id, v]) => ({
+      id,
+      name: v.name || "",
+      iconChar: v.iconChar || (v.name ? v.name.charAt(0).toUpperCase() : "?"),
+      iconUrl: resolveImageUrl(v.iconUrl || v.icon || ""),
+      gradient: v.gradient || DEFAULT_GRADIENTS[0],
+      glowColor: v.glowColor || "rgba(139,92,246,0.6)",
+      tag: v.tag || "",
+      tagClass: v.tagClass || "bg-white/10 text-white/70 border-white/15",
+      shortDesc: v.shortDesc || "",
+      longDesc: v.longDesc || "",
+      size: v.size || "",
+      downloads: Number(v.downloads || 0),
+      rating: Number(v.rating || 0),
+      version: v.version || "",
+      platforms: Array.isArray(v.platforms) ? v.platforms : [],
+      features: Array.isArray(v.features) ? v.features : [],
+      screenshots: Array.isArray(v.screenshots) ? v.screenshots.map(resolveImageUrl) : [],
+      downloadUrl: v.downloadUrl || ""
+    }));
+    renderApps();
+    STATS.apps = APPS.length;
+    renderStats();
+  });
 
-return {
-id,
-name: v.name || "",
-iconChar: v.iconChar || (v.name ? v.name.charAt(0).toUpperCase() : "?"),
-iconUrl: resolveImageUrl(v.iconUrl || v.icon || v.logoUrl || ""),
-gradient: v.gradient || DEFAULT_GRADIENTS[0],
-glowColor: v.glowColor || "rgba(139,92,246,0.6)",
-tag: v.isLocked ? "LOCKED" : (v.tag || "NEW"),
-tagClass: v.isLocked 
-  ? "bg-rose-500/20 text-rose-300 border-rose-400/30" 
-  : (v.tagClass || "bg-emerald-500/20 text-emerald-300 border-emerald-400/30"),
-shortDesc: v.shortDesc || (v.description ? v.description.substring(0, 120) : ""),
-longDesc: v.longDesc || v.description || "",
-size: v.size || "",
-downloads: Number(v.downloads || 0),
-rating: Number(v.rating || 5),
-version: v.version || v.latestVersion || "1.0.0",
-latestVersion: v.latestVersion || v.version || "1.0.0",
-platforms: Array.isArray(v.platforms) && v.platforms.length ? v.platforms : ["Android"],
-features: rawFeatures,
-screenshots: rawScreenshots.map(resolveImageUrl),
-downloadUrl: v.downloadUrl || v.apkUrl || "",
-isLocked: !!v.isLocked
-};
-});
-renderApps();
-STATS.apps = APPS.length;
-renderStats();
-});
+  onValue(ref(db, "reviews"), (snap) => {
+    const val = snap.val() || {};
+    REVIEWS = Object.entries(val)
+      .map(([uid, v]) => {
+        if (!v || typeof v !== "object") return null;
+        const username = v.username || v.name || "Anonymous";
+        const avatarUrl = resolveImageUrl(v.avatar || v.avatarUrl || "");
+        const rating = Number(v.rating || 5);
+        const timestamp = Number(v.timestamp || 0);
+        const selectedOption = v.selectedOption || "";
+        const customText = v.customText || v.text || "";
+        return {
+          uid, userId: v.userId || uid, username, email: v.email || "",
+          initials: getInitials(username),
+          color: getAvatarColor(v.userId || uid),
+          avatarUrl, rating, selectedOption, customText,
+          text: buildReviewText({ selectedOption, customText }),
+          timestamp, date: formatReviewDate(timestamp)
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
-// reviews listener
-onValue(ref(db, "reviews"), (snap) => {
-const val = snap.val() || {};
-REVIEWS = Object.entries(val)
-.map(([uid, v]) => {
-if (!v || typeof v !== "object") return null;
-const username = v.username || v.name || "Anonymous";
-const avatarUrl = resolveImageUrl(v.avatar || v.avatarUrl || "");
-const rating = Number(v.rating || 5);
-const timestamp = Number(v.timestamp || 0);
-const selectedOption = v.selectedOption || "";
-const customText = v.customText || v.text || "";
-return {
-uid: uid,
-userId: v.userId || uid,
-username: username,
-email: v.email || "",
-initials: getInitials(username),
-color: getAvatarColor(v.userId || uid),
-avatarUrl: avatarUrl,
-rating: rating,
-selectedOption: selectedOption,
-customText: customText,
-text: buildReviewText({ selectedOption, customText }),
-timestamp: timestamp,
-date: formatReviewDate(timestamp)
-};
-})
-.filter(Boolean)
-.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+    renderReviews();
+    if (REVIEWS.length > 0) {
+      const avg = REVIEWS.reduce((s, r) => s + r.rating, 0) / REVIEWS.length;
+      STATS.reviewAvg = Number(avg.toFixed(1));
+      STATS.rating = Number(avg.toFixed(1));
+      renderStats();
+    }
+  });
 
-renderReviews();
-if (REVIEWS.length > 0) {
-const avg = REVIEWS.reduce((s, r) => s + r.rating, 0) / REVIEWS.length;
-STATS.reviewAvg = Number(avg.toFixed(1));
-STATS.rating = Number(avg.toFixed(1));
-renderStats();
-}
-});
+  onValue(ref(db, "stats"), (snap) => {
+    const v = snap.val() || {};
+    STATS = {
+      ...STATS,
+      downloads: v.downloads != null ? Number(v.downloads) : STATS.downloads,
+      rating: v.rating != null ? Number(v.rating) : STATS.rating,
+      uptime: v.uptime != null ? Number(v.uptime) : STATS.uptime,
+      malware: v.malware != null ? Number(v.malware) : STATS.malware,
+      privacy: v.privacy != null ? Number(v.privacy) : STATS.privacy,
+      apps: v.apps != null ? Number(v.apps) : STATS.apps
+    };
+    renderStats();
+  });
 
-// stats listener
-onValue(ref(db, "stats"), (snap) => {
-const v = snap.val() || {};
-STATS = {
-...STATS,
-downloads: v.downloads != null ? Number(v.downloads) : STATS.downloads,
-rating: v.rating != null ? Number(v.rating) : STATS.rating,
-uptime: v.uptime != null ? Number(v.uptime) : STATS.uptime,
-malware: v.malware != null ? Number(v.malware) : STATS.malware,
-privacy: v.privacy != null ? Number(v.privacy) : STATS.privacy,
-apps: v.apps != null ? Number(v.apps) : STATS.apps
-};
-renderStats();
-});
+  onValue(ref(db, "banner"), (snap) => {
+    const v = snap.val() || {};
+    BANNER = {
+      imageUrl: resolveImageUrl(v.imageUrl || v.image || ""),
+      title: v.title || "",
+      description: v.description || "",
+      badge: v.badge || ""
+    };
+    renderBanner();
+  });
 
-// banner listener (reads from 'banner' node directly)
-onValue(ref(db, "banner"), (snap) => {
-const v = snap.val() || {};
-BANNER = {
-imageUrl: resolveImageUrl(v.imageUrl || v.image || ""),
-title: v.title || "",
-description: v.description || "",
-badge: v.badge || ""
-};
-renderBanner();
-});
-
-return true;
+  return true;
 }
 
 function renderApps() {
-const grid = document.getElementById("apps-grid");
-const empty = document.getElementById("apps-empty");
+  const grid = document.getElementById("apps-grid");
+  const empty = document.getElementById("apps-empty");
+  if (!grid) return;
 
-if (!APPS.length) {
-grid.innerHTML = "";
-grid.classList.add("hidden");
-empty.classList.remove("hidden");
-lucide.createIcons();
-return;
-}
-grid.classList.remove("hidden");
-empty.classList.add("hidden");
+  if (!APPS.length) {
+    grid.innerHTML = "";
+    grid.classList.add("hidden");
+    if (empty) empty.classList.remove("hidden");
+    safeCreateIcons();
+    return;
+  }
+  grid.classList.remove("hidden");
+  if (empty) empty.classList.add("hidden");
 
-grid.innerHTML = APPS.map(app => `
-<div class="glass-base rounded-[20px] p-3.5 cursor-pointer hover:-translate-y-1.5 transition-all duration-300 group relative border border-white/10 flex flex-col justify-between ${app.isLocked ? 'opacity-80' : ''}"
-style="--glow-color:${app.glowColor}" data-app-id="${app.id}">
-<div>
-<div class="flex items-start justify-between mb-2.5">
-${app.iconUrl
-? `<img src="${app.iconUrl}" alt="${escapeHtml(app.name)}" class="w-12 h-12 rounded-[14px] object-cover icon-3d group-hover:rotate-3 transition-transform duration-300"
-onerror="this.outerHTML='<div class=\\'w-12 h-12 rounded-[14px] bg-gradient-to-br ${app.gradient} flex items-center justify-center font-display font-extrabold text-lg text-white icon-3d\\'>${app.iconChar}</div>'" />`
-: `<div class="w-12 h-12 rounded-[14px] bg-gradient-to-br ${app.gradient} flex items-center justify-center font-display font-extrabold text-lg text-white icon-3d group-hover:rotate-3 transition-transform duration-300">${app.iconChar}</div>`
-}
-${app.tag ? `<span class="text-[8px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${app.tagClass}">${escapeHtml(app.tag)}</span>` : ``}
-</div>
-<h3 class="font-display font-bold text-sm text-white group-hover:text-cyan-300 transition-colors flex items-center gap-1.5">
-${escapeHtml(app.name)}
-${app.isLocked ? `<i data-lucide="lock" class="w-3.5 h-3.5 text-rose-400"></i>` : ''}
-</h3>
-<p class="text-[10px] text-white/70 mt-1 leading-relaxed line-clamp-2">${escapeHtml(app.shortDesc)}</p>
-</div>
-<div class="flex items-center gap-1.5 mt-3.5 pt-2.5 border-t border-white/10">
-${app.size ? `<span class="glass-pill px-1.5 py-0.5 rounded-md text-[9px] text-white/70">${escapeHtml(app.size)}</span>` : ``}
-<span class="glass-pill px-1.5 py-0.5 rounded-md text-[9px] text-white/70">↓ ${app.downloads}</span>
-<span class="glass-pill px-1.5 py-0.5 rounded-md text-[9px] text-amber-300">★ ${app.rating}</span>
-${app.version ? `<span class="glass-pill px-1.5 py-0.5 rounded-md text-[9px] text-white/50 ml-auto font-mono">v${escapeHtml(app.version)}</span>` : ''}
-</div>
-</div>
-`).join("");
+  grid.innerHTML = APPS.map(app => `
+    <div class="glass-base rounded-[20px] p-4 cursor-pointer hover:-translate-y-1.5 transition-all duration-300 group relative border border-white/10 flex flex-col justify-between"
+    style="--glow-color:${app.glowColor}" data-app-id="${app.id}">
+      <div>
+        <div class="flex items-start justify-between mb-3">
+          ${app.iconUrl
+            ? `<img src="${app.iconUrl}" alt="${escapeHtml(app.name)}" class="w-12 h-12 rounded-[14px] object-cover icon-3d group-hover:rotate-3 transition-transform duration-300"
+            onerror="this.outerHTML='<div class=\\'w-12 h-12 rounded-[14px] bg-gradient-to-br ${app.gradient} flex items-center justify-center font-display font-extrabold text-lg text-white icon-3d\\'>${app.iconChar}</div>'" />`
+            : `<div class="w-12 h-12 rounded-[14px] bg-gradient-to-br ${app.gradient} flex items-center justify-center font-display font-extrabold text-lg text-white icon-3d group-hover:rotate-3 transition-transform duration-300">${app.iconChar}</div>`
+          }
+          ${app.tag ? `<span class="text-[8px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${app.tagClass}">${escapeHtml(app.tag)}</span>` : ``}
+        </div>
+        <h3 class="font-display font-bold text-sm text-white group-hover:text-cyan-300 transition-colors">${escapeHtml(app.name)}</h3>
+        <p class="text-[11px] text-white/70 mt-1 leading-relaxed line-clamp-2">${escapeHtml(app.shortDesc)}</p>
+      </div>
+      <div class="flex items-center gap-1.5 mt-4 pt-2.5 border-t border-white/10">
+        ${app.size ? `<span class="glass-pill px-2 py-0.5 rounded-md text-[9px] text-white/70">${escapeHtml(app.size)}</span>` : ``}
+        <span class="glass-pill px-2 py-0.5 rounded-md text-[9px] text-white/70">↓ ${app.downloads}</span>
+        <span class="glass-pill px-2 py-0.5 rounded-md text-[9px] text-amber-300">★ ${app.rating}</span>
+      </div>
+    </div>
+  `).join("");
 
-grid.querySelectorAll("[data-app-id]").forEach(el => {
-el.addEventListener("click", () => {
-const app = APPS.find(a => a.id === el.dataset.appId);
-if (app) openAppModal(app);
-});
-});
-lucide.createIcons();
+  grid.querySelectorAll("[data-app-id]").forEach(el => {
+    el.addEventListener("click", () => {
+      const app = APPS.find(a => a.id === el.dataset.appId);
+      if (app) openAppModal(app);
+    });
+  });
+  safeCreateIcons();
 }
 
 function renderReviews() {
-const grid = document.getElementById("reviews-grid");
-const empty = document.getElementById("reviews-empty");
+  const grid = document.getElementById("reviews-grid");
+  const empty = document.getElementById("reviews-empty");
+  if (!grid) return;
 
-if (!REVIEWS.length) {
-grid.innerHTML = "";
-grid.classList.add("hidden");
-empty.classList.remove("hidden");
-document.getElementById("review-avg").textContent = "0";
-lucide.createIcons();
-return;
-}
-grid.classList.remove("hidden");
-empty.classList.add("hidden");
+  if (!REVIEWS.length) {
+    grid.innerHTML = "";
+    grid.classList.add("hidden");
+    if (empty) empty.classList.remove("hidden");
+    const avgEl = document.getElementById("review-avg");
+    if (avgEl) avgEl.textContent = "0";
+    safeCreateIcons();
+    return;
+  }
+  grid.classList.remove("hidden");
+  if (empty) empty.classList.add("hidden");
 
-const avg = (REVIEWS.reduce((s, r) => s + r.rating, 0) / REVIEWS.length).toFixed(1);
-document.getElementById("review-avg").textContent = avg;
+  const avg = (REVIEWS.reduce((s, r) => s + r.rating, 0) / REVIEWS.length).toFixed(1);
+  const avgEl = document.getElementById("review-avg");
+  if (avgEl) avgEl.textContent = avg;
 
-grid.innerHTML = REVIEWS.slice(0, 6).map(r => `
-<div class="glass-base rounded-[16px] p-4 hover:-translate-y-1 transition-all duration-300 relative group">
-<span class="absolute top-3 right-4 text-4xl font-serif text-white/5 select-none pointer-events-none group-hover:text-white/10 transition-colors">“</span>
-<div class="flex items-center gap-2.5 mb-3">
-${r.avatarUrl
-? `<img src="${r.avatarUrl}" alt="${escapeHtml(r.username)}" class="w-8 h-8 rounded-full object-cover border border-white/15"
-onerror="this.outerHTML='<div class=\\'w-8 h-8 rounded-full glass-pill flex items-center justify-center font-bold text-[10px] ${r.color}\\'>${r.initials}</div>'" />`
-: `<div class="w-8 h-8 rounded-full glass-pill flex items-center justify-center font-bold text-[10px] ${r.color}">${r.initials}</div>`
-}
-<div>
-<h4 class="text-[11px] font-semibold text-white">${escapeHtml(r.username)}</h4>
-<div class="flex items-center gap-1 text-[9px] text-white/40">
-<span>${escapeHtml(r.date)}</span> • <span class="text-amber-300">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</span>
-</div>
-</div>
-</div>
-${r.selectedOption ? `<p class="text-white/85 text-[10px] md:text-[11px] leading-relaxed mb-1">"${escapeHtml(r.selectedOption)}"</p>` : ``}
-${r.customText ? `<p class="text-white/60 text-[10px] md:text-[11px] leading-relaxed italic">${escapeHtml(r.customText)}</p>` : ``}
-</div>
-`).join("");
-lucide.createIcons();
+  grid.innerHTML = REVIEWS.slice(0, 9).map(r => `
+    <div class="glass-base rounded-[18px] p-4 hover:-translate-y-1 transition-all duration-300 relative group">
+      <span class="absolute top-3 right-4 text-4xl font-serif text-white/5 select-none pointer-events-none group-hover:text-white/10 transition-colors">“</span>
+      <div class="flex items-center gap-2.5 mb-3">
+        ${r.avatarUrl
+          ? `<img src="${r.avatarUrl}" alt="${escapeHtml(r.username)}" class="w-9 h-9 rounded-full object-cover border border-white/15"
+          onerror="this.outerHTML='<div class=\\'w-9 h-9 rounded-full glass-pill flex items-center justify-center font-bold text-[10px] ${r.color}\\'>${r.initials}</div>'" />`
+          : `<div class="w-9 h-9 rounded-full glass-pill flex items-center justify-center font-bold text-[10px] ${r.color}">${r.initials}</div>`
+        }
+        <div>
+          <h4 class="text-xs font-semibold text-white">${escapeHtml(r.username)}</h4>
+          <div class="flex items-center gap-1 text-[10px] text-white/40">
+            <span>${escapeHtml(r.date)}</span> • <span class="text-amber-300">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</span>
+          </div>
+        </div>
+      </div>
+      ${r.selectedOption ? `<p class="text-white/85 text-xs leading-relaxed mb-1">"${escapeHtml(r.selectedOption)}"</p>` : ``}
+      ${r.customText ? `<p class="text-white/60 text-xs leading-relaxed italic">${escapeHtml(r.customText)}</p>` : ``}
+    </div>
+  `).join("");
+  safeCreateIcons();
 }
 
 function renderStats() {
-document.getElementById("stat-downloads").textContent = STATS.downloads;
-document.getElementById("stat-rating").textContent = STATS.rating + "★";
-document.getElementById("stat-uptime").textContent = STATS.uptime + "%";
-document.getElementById("stat-apps").textContent = STATS.apps;
-document.getElementById("stat-malware").textContent = STATS.malware;
-document.getElementById("stat-privacy").textContent = STATS.privacy + "%";
+  const elD = document.getElementById("stat-downloads");
+  if (elD) elD.textContent = STATS.downloads;
+  const elR = document.getElementById("stat-rating");
+  if (elR) elR.textContent = STATS.rating + "★";
+  const elU = document.getElementById("stat-uptime");
+  if (elU) elU.textContent = STATS.uptime + "%";
+  const elA = document.getElementById("stat-apps");
+  if (elA) elA.textContent = STATS.apps;
+  const elM = document.getElementById("stat-malware");
+  if (elM) elM.textContent = STATS.malware;
+  const elP = document.getElementById("stat-privacy");
+  if (elP) elP.textContent = STATS.privacy + "%";
 }
 
 function renderBanner() {
-const img = document.getElementById("hero-banner-img");
-const fallback = document.getElementById("hero-banner-fallback");
-const blurBg = document.querySelector(".hero-banner-blur-bg");
+  const img = document.getElementById("hero-banner-img");
+  const fallback = document.getElementById("hero-banner-fallback");
+  const blurBg = document.querySelector(".hero-banner-blur-bg");
 
-if (BANNER.imageUrl) {
-img.src = BANNER.imageUrl;
-img.classList.remove("hidden");
-fallback.classList.add("hidden");
-if (blurBg) blurBg.style.opacity = "0.35";
-img.onerror = () => {
-img.classList.add("hidden");
-fallback.classList.remove("hidden");
-if (blurBg) blurBg.style.opacity = "0.85";
-};
-} else {
-img.removeAttribute("src");
-img.classList.add("hidden");
-fallback.classList.add("hidden");
-if (blurBg) blurBg.style.opacity = "0.85";
-}
+  if (BANNER.imageUrl && img) {
+    img.src = BANNER.imageUrl;
+    img.classList.remove("hidden");
+    if (fallback) fallback.classList.add("hidden");
+    if (blurBg) blurBg.style.opacity = "0.35";
+    img.onerror = () => {
+      img.classList.add("hidden");
+      if (fallback) fallback.classList.remove("hidden");
+      if (blurBg) blurBg.style.opacity = "0.85";
+    };
+  } else if (img) {
+    img.removeAttribute("src");
+    img.classList.add("hidden");
+    if (fallback) fallback.classList.add("hidden");
+    if (blurBg) blurBg.style.opacity = "0.85";
+  }
 
-if (BANNER.badge) document.getElementById("hero-badge-text").textContent = BANNER.badge;
-if (BANNER.title) document.getElementById("hero-title").innerHTML = BANNER.title;
-if (BANNER.description) document.getElementById("hero-desc").textContent = BANNER.description;
+  if (BANNER.badge && document.getElementById("hero-badge-text")) {
+    document.getElementById("hero-badge-text").textContent = BANNER.badge;
+  }
+  if (BANNER.title && document.getElementById("hero-title")) {
+    document.getElementById("hero-title").innerHTML = BANNER.title;
+  }
+  if (BANNER.description && document.getElementById("hero-desc")) {
+    document.getElementById("hero-desc").textContent = BANNER.description;
+  }
 }
 
 const modal = document.getElementById("app-modal");
@@ -905,202 +1406,273 @@ const modalContent = document.getElementById("modal-dynamic-content");
 let isDownloading = false;
 
 function openAppModal(app) {
-modalContent.innerHTML = `
-<div class="flex flex-col md:flex-row gap-4 items-start mb-4">
-${app.iconUrl
-? `<img src="${app.iconUrl}" alt="${escapeHtml(app.name)}" class="w-16 h-16 md:w-20 md:h-20 rounded-2xl object-cover icon-3d shrink-0"
-onerror="this.outerHTML='<div class=\\'w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br ${app.gradient} flex items-center justify-center font-display font-extrabold text-2xl text-white icon-3d shrink-0\\'>${app.iconChar}</div>'" />`
-: `<div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br ${app.gradient} flex items-center justify-center font-display font-extrabold text-2xl text-white icon-3d shrink-0">${app.iconChar}</div>`
-}
-<div class="flex-1">
-<div class="flex flex-wrap items-center gap-1.5 mb-1.5">
-${app.tag ? `<span class="text-[8px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${app.tagClass}">${escapeHtml(app.tag)}</span>` : ``}
-${app.version ? `<span class="glass-pill px-2 py-0.5 rounded-full text-[9px] text-white/60 font-mono">v${escapeHtml(app.version)}</span>` : ``}
-</div>
-<h2 class="font-display font-bold text-lg md:text-xl text-white">${escapeHtml(app.name)}</h2>
-<div class="flex items-center gap-2 mt-2 flex-wrap">
-${app.platforms.map(p => `
-<span class="glass-pill px-2 py-0.5 rounded-full text-[9px] text-white/80 flex items-center gap-1">
-<i data-lucide="${p === 'Android' ? 'smartphone' : 'monitor'}" class="w-3 h-3 text-cyan-400"></i> ${escapeHtml(p)}
-</span>
-`).join("")}
-</div>
-</div>
-</div>
+  modalContent.innerHTML = `
+    <div class="flex flex-col md:flex-row gap-4 items-start mb-4">
+      ${app.iconUrl
+        ? `<img src="${app.iconUrl}" alt="${escapeHtml(app.name)}" class="w-16 h-16 md:w-20 md:h-20 rounded-2xl object-cover icon-3d shrink-0"
+        onerror="this.outerHTML='<div class=\\'w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br ${app.gradient} flex items-center justify-center font-display font-extrabold text-2xl text-white icon-3d shrink-0\\'>${app.iconChar}</div>'" />`
+        : `<div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br ${app.gradient} flex items-center justify-center font-display font-extrabold text-2xl text-white icon-3d shrink-0">${app.iconChar}</div>`
+      }
+      <div class="flex-1">
+        <div class="flex flex-wrap items-center gap-1.5 mb-1.5">
+          ${app.tag ? `<span class="text-[8px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${app.tagClass}">${escapeHtml(app.tag)}</span>` : ``}
+          ${app.version ? `<span class="glass-pill px-2 py-0.5 rounded-full text-[9px] text-white/60 font-mono">${escapeHtml(app.version)}</span>` : ``}
+        </div>
+        <h2 class="font-display font-bold text-lg md:text-xl text-white">${escapeHtml(app.name)}</h2>
+        <div class="flex items-center gap-2 mt-2 flex-wrap">
+          ${app.platforms.map(p => `
+            <span class="glass-pill px-2 py-0.5 rounded-full text-[9px] text-white/80 flex items-center gap-1">
+              <i data-lucide="${p === 'Android' ? 'smartphone' : 'monitor'}" class="w-3 h-3 text-cyan-400"></i> ${escapeHtml(p)}
+            </span>
+          `).join("")}
+        </div>
+      </div>
+    </div>
 
-${app.longDesc ? `<p class="text-[10px] md:text-[11px] text-white/70 leading-relaxed max-w-2xl mb-4">${escapeHtml(app.longDesc)}</p>` : ``}
+    ${app.longDesc ? `<p class="text-xs text-white/70 leading-relaxed max-w-2xl mb-4">${escapeHtml(app.longDesc)}</p>` : ``}
 
-${app.screenshots.length ? `
-<div class="mb-4">
-<div class="text-[9px] font-bold text-white/80 mb-1.5 uppercase tracking-wider">Interface Preview</div>
-<div class="grid grid-cols-3 gap-2">
-${app.screenshots.map(s => `
-<div class="glass-base rounded-lg p-2 text-center border border-white/10 overflow-hidden">
-<div class="h-20 rounded-md bg-gradient-to-tr from-white/5 to-white/15 flex items-center justify-center mb-1.5 overflow-hidden">
-${s
-? `<img src="${s}" alt="Screenshot" class="w-full h-full object-cover rounded-md"
-onerror="this.outerHTML='<i data-lucide=\\'image\\' class=\\'w-4 h-4 text-white/40\\'></i>'" />`
-: `<i data-lucide="image" class="w-4 h-4 text-white/40"></i>`}
-</div>
-</div>
-`).join("")}
-</div>
-</div>
-` : ``}
+    ${app.screenshots.length ? `
+      <div class="mb-4">
+        <div class="text-[9px] font-bold text-white/80 mb-1.5 uppercase tracking-wider">Interface Preview</div>
+        <div class="grid grid-cols-3 gap-2">
+          ${app.screenshots.map(s => `
+            <div class="glass-base rounded-lg p-2 text-center border border-white/10 overflow-hidden">
+              <div class="h-20 rounded-md bg-gradient-to-tr from-white/5 to-white/15 flex items-center justify-center mb-1.5 overflow-hidden">
+                ${s
+                  ? `<img src="${s}" alt="Screenshot" class="w-full h-full object-cover rounded-md"
+                  onerror="this.outerHTML='<i data-lucide=\\'image\\' class=\\'w-4 h-4 text-white/40\\'></i>'" />`
+                  : `<i data-lucide="image" class="w-4 h-4 text-white/40"></i>`}
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    ` : ``}
 
-${app.features.length ? `
-<div class="space-y-1.5 mb-5">
-${app.features.map(f => `
-<div class="flex items-center gap-2 text-[10px] md:text-[11px] text-white/80">
-<span class="w-3.5 h-3.5 rounded-full bg-white text-black flex items-center justify-center shrink-0 text-[8px] font-bold">✓</span>
-<span>${escapeHtml(f)}</span>
-</div>
-`).join("")}
-</div>
-` : ``}
+    ${app.features.length ? `
+      <div class="space-y-1.5 mb-5">
+        ${app.features.map(f => `
+          <div class="flex items-center gap-2 text-xs text-white/80">
+            <span class="w-3.5 h-3.5 rounded-full bg-white text-black flex items-center justify-center shrink-0 text-[8px] font-bold">✓</span>
+            <span>${escapeHtml(f)}</span>
+          </div>
+        `).join("")}
+      </div>
+    ` : ``}
 
-<div class="space-y-2">
-${app.isLocked ? `
-<div class="w-full h-11 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-300 font-semibold text-[11px] flex items-center justify-center gap-2">
-<i data-lucide="lock" class="w-4 h-4"></i>
-<span>App Currently Under Maintenance</span>
-</div>
-` : `
-<button id="modal-dl-btn" class="w-full h-11 rounded-full bg-white text-black font-semibold text-[11px] relative overflow-hidden flex items-center justify-center gap-2 btn-shine shadow-[0_0_30px_rgba(255,255,255,0.25)] hover:scale-[1.01] active:scale-[0.99] transition-transform">
-<div id="btn-progress-fill" class="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-violet-300 via-fuchsia-300 to-cyan-300 transition-all duration-150 w-0 opacity-80"></div>
-<span id="btn-text" class="relative z-10 flex items-center gap-2 font-bold">
-<span>Download Now ${app.size ? `(${escapeHtml(app.size)})` : ``}</span>
-<i data-lucide="arrow-right" class="w-3 h-3"></i>
-</span>
-</button>
-`}
-<div class="text-center text-[9px] text-white/40">
-Verified Safe • No Ads • Free Forever • 2026 Build
-</div>
-</div>
-`;
+    <div class="space-y-2">
+      <button id="modal-dl-btn" class="w-full h-11 rounded-full bg-white text-black font-semibold text-xs relative overflow-hidden flex items-center justify-center gap-2 btn-shine shadow-[0_0_30px_rgba(255,255,255,0.25)] hover:scale-[1.01] active:scale-[0.99] transition-transform">
+        <div id="btn-progress-fill" class="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-violet-300 via-fuchsia-300 to-cyan-300 transition-all duration-150 w-0 opacity-80"></div>
+        <span id="btn-text" class="relative z-10 flex items-center gap-2 font-bold">
+          <span>Download Now ${app.size ? `(${escapeHtml(app.size)})` : ``}</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </span>
+      </button>
+      <div class="text-center text-[9px] text-white/40">
+        Verified Safe • No Ads • Free Forever • 2026 Build
+      </div>
+    </div>
+  `;
 
-lucide.createIcons();
-modal.classList.remove("opacity-0", "pointer-events-none");
-modalBox.classList.remove("scale-95");
+  safeCreateIcons();
+  modal.classList.remove("opacity-0", "pointer-events-none");
+  modalBox.classList.remove("scale-95");
 
-const dlBtn = document.getElementById("modal-dl-btn");
-if (dlBtn && !app.isLocked) {
-dlBtn.addEventListener("click", () => triggerDownloadProcess(app));
-}
+  const dlBtn = document.getElementById("modal-dl-btn");
+  if (dlBtn) {
+    dlBtn.onclick = () => triggerDownloadProcess(app);
+  }
 }
 
 function closeModal() {
-modal.classList.add("opacity-0", "pointer-events-none");
-modalBox.classList.add("scale-95");
+  modal.classList.add("opacity-0", "pointer-events-none");
+  modalBox.classList.add("scale-95");
 }
 modalCloseBtn.addEventListener("click", closeModal);
 modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
 
 function triggerDownloadProcess(app) {
-if (isDownloading) return;
-isDownloading = true;
+  if (isDownloading) return;
+  isDownloading = true;
 
-const progressFill = document.getElementById("btn-progress-fill");
-const btnText = document.getElementById("btn-text");
-const toast = document.getElementById("download-toast");
-const toastBar = document.getElementById("toast-progress-bar");
-const toastTitle = document.getElementById("toast-title");
-const toastPercent = document.getElementById("toast-percent");
+  const progressFill = document.getElementById("btn-progress-fill");
+  const btnText = document.getElementById("btn-text");
+  const toast = document.getElementById("download-toast");
+  const toastBar = document.getElementById("toast-progress-bar");
+  const toastTitle = document.getElementById("toast-title");
+  const toastPercent = document.getElementById("toast-percent");
 
-toastTitle.textContent = `Downloading ${app.name}...`;
-toast.classList.remove("opacity-0", "translate-y-24", "pointer-events-none");
+  if (toastTitle) toastTitle.textContent = `Downloading ${app.name}...`;
+  toast.classList.remove("opacity-0", "translate-y-24", "pointer-events-none");
 
-let progress = 0;
-const interval = setInterval(() => {
-progress += Math.floor(Math.random() * 12) + 5;
-if (progress > 100) progress = 100;
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += Math.floor(Math.random() * 12) + 5;
+    if (progress > 100) progress = 100;
 
-if (progressFill) progressFill.style.width = `${progress}%`;
-if (btnText) btnText.innerHTML = `Downloading ${progress}%`;
-toastBar.style.width = `${progress}%`;
-toastPercent.textContent = `${progress}%`;
+    if (progressFill) progressFill.style.width = `${progress}%`;
+    if (btnText) btnText.innerHTML = `Downloading ${progress}%`;
+    if (toastBar) toastBar.style.width = `${progress}%`;
+    if (toastPercent) toastPercent.textContent = `${progress}%`;
 
-if (progress >= 100) {
-clearInterval(interval);
-if (btnText) btnText.innerHTML = `✓ Installed & Ready`;
-toastTitle.textContent = `${app.name} download complete!`;
+    if (progress >= 100) {
+      clearInterval(interval);
+      if (btnText) btnText.innerHTML = `✓ Installed & Ready`;
+      if (toastTitle) toastTitle.textContent = `${app.name} download complete!`;
 
-try {
-const fb = window.__fb;
-if (fb && fb.db && fb.ref && fb.update && app.id) {
-const current = Number(app.downloads || 0);
-fb.update(fb.ref(fb.db, `apps/${app.id}`), { downloads: current + 1 });
-const currentGlobal = Number(STATS.downloads || 0);
-fb.update(fb.ref(fb.db, `stats`), { downloads: currentGlobal + 1 });
+      try {
+        const fb = window.__fb;
+        if (fb && fb.db && fb.ref && fb.update && app.id) {
+          const current = Number(app.downloads || 0);
+          fb.update(fb.ref(fb.db, `apps/${app.id}`), { downloads: current + 1 });
+          const currentGlobal = Number(STATS.downloads || 0);
+          fb.update(fb.ref(fb.db, `stats`), { downloads: currentGlobal + 1 });
+        }
+      } catch (e) { console.warn("Firebase increment failed:", e); }
+
+      if (app.downloadUrl) {
+        try { window.open(app.downloadUrl, "_blank", "noopener"); } catch (e) {}
+      }
+
+      safeConfetti({
+        particleCount: 70, spread: 70, origin: { y: 0.6 },
+        colors: ["#a78bfa", "#f0abfc", "#67e8f9", "#fcd34d"]
+      });
+
+      setTimeout(() => {
+        isDownloading = false;
+        toast.classList.add("opacity-0", "translate-y-24", "pointer-events-none");
+      }, 3500);
+    }
+  }, 150);
 }
-} catch (e) { console.warn("Firebase increment failed:", e); }
 
-if (app.downloadUrl) {
-try { window.open(app.downloadUrl, "_blank", "noopener"); } catch (e) {}
+// 7 Page Views Controller
+const VIEWS = ["home", "details", "review", "download", "connect", "privacy", "support", "developer"];
+
+function navigateToView(name) {
+  if (!VIEWS.includes(name)) name = "home";
+  VIEWS.forEach(v => {
+    const el = document.getElementById(`view-${v}`);
+    if (!el) return;
+    if (v === name) {
+      el.classList.remove("hidden");
+    } else {
+      el.classList.add("hidden");
+    }
+  });
+
+  document.querySelectorAll("[data-nav]").forEach(l => {
+    l.classList.remove("active");
+    if (l.getAttribute("data-nav") === name) l.classList.add("active");
+  });
+
+  if (name === "home") {
+    history.replaceState(null, "", location.pathname + location.search);
+  } else {
+    history.replaceState(null, "", `#${name}`);
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  safeCreateIcons();
 }
 
-confetti({
-particleCount: 70, spread: 70, origin: { y: 0.6 },
-colors: ["#a78bfa", "#f0abfc", "#67e8f9", "#fcd34d"]
+// 3D Spinning Letters & Logo Welcome Screen Transition
+function triggerHeavyPortalTransition(targetView = "details") {
+  const overlay = document.getElementById("heavy-portal-overlay");
+  if (!overlay) {
+    navigateToView(targetView);
+    return;
+  }
+
+  // Re-trigger letter and logo animations cleanly
+  const letters = overlay.querySelectorAll(".spin-letter");
+  letters.forEach(letter => {
+    letter.style.animation = "none";
+    void letter.offsetWidth;
+    letter.style.animation = "";
+  });
+
+  const logoAnim = overlay.querySelector(".welcome-logo-anim");
+  if (logoAnim) {
+    logoAnim.style.animation = "none";
+    void logoAnim.offsetWidth;
+    logoAnim.style.animation = "";
+  }
+
+  overlay.classList.add("portal-active");
+
+  safeConfetti({
+    particleCount: 80,
+    spread: 100,
+    origin: { y: 0.5 },
+    colors: ["#c084fc", "#38bdf8", "#f472b6", "#e879f9"]
+  });
+
+  // Smoothly open the Details view
+  setTimeout(() => {
+    navigateToView(targetView);
+    setTimeout(() => {
+      overlay.classList.remove("portal-active");
+    }, 450);
+  }, 1750);
+}
+
+// Get Started Button Action -> Triggers spinning letter welcome transition then opens details
+const getStartedBtn = document.getElementById("btn-get-started");
+if (getStartedBtn) {
+  getStartedBtn.addEventListener("click", () => {
+    triggerHeavyPortalTransition("details");
+  });
+}
+
+// Try Metyb Apps button inside Developer section
+const devTryBtn = document.getElementById("dev-try-apps-btn");
+if (devTryBtn) {
+  devTryBtn.addEventListener("click", () => {
+    navigateToView("download");
+  });
+}
+
+// Navigation Click Handler
+document.querySelectorAll("[data-nav]").forEach(btn => {
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const target = btn.getAttribute("data-nav");
+    navigateToView(target);
+  });
 });
 
-setTimeout(() => {
-isDownloading = false;
-toast.classList.add("opacity-0", "translate-y-24", "pointer-events-none");
-}, 3500);
+function handleHash() {
+  const hash = location.hash.replace("#", "");
+  if (VIEWS.includes(hash)) {
+    navigateToView(hash);
+  } else {
+    navigateToView("home");
+  }
 }
-}, 150);
-}
+window.addEventListener("hashchange", handleHash);
 
-const mobileBtn = document.getElementById("mobile-menu-btn");
-const mobileMenu = document.getElementById("mobile-menu");
-mobileBtn.addEventListener("click", () => mobileMenu.classList.toggle("hidden"));
-document.querySelectorAll(".mobile-nav-link").forEach(l =>
-l.addEventListener("click", () => mobileMenu.classList.add("hidden"))
-);
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-anchor.addEventListener("click", function (e) {
-const href = this.getAttribute("href");
-if (href === "#") return;
-const target = document.querySelector(href);
-if (target) {
-e.preventDefault();
-const y = target.getBoundingClientRect().top + window.pageYOffset - 56;
-window.scrollTo({ top: y, behavior: "smooth" });
-}
-});
-});
-
-const sections = document.querySelectorAll("section[id]");
-const navLinks = document.querySelectorAll(".nav-link");
-window.addEventListener("scroll", () => {
-let current = "";
-sections.forEach(s => {
-if (window.scrollY >= s.offsetTop - 100) current = s.id;
-});
-navLinks.forEach(l => {
-l.classList.remove("active");
-if (l.getAttribute("href") === `#${current}`) l.classList.add("active");
-});
+// FAQ Toggle
+document.querySelectorAll(".faq-toggle").forEach(btn => {
+  btn.addEventListener("click", () => btn.closest(".faq-item").classList.toggle("open"));
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-renderApps();
-renderReviews();
-renderStats();
-renderBanner();
-lucide.createIcons();
+  renderApps();
+  renderReviews();
+  renderStats();
+  renderBanner();
+  safeCreateIcons();
+  handleHash();
 });
 
-// Firebase লোডিং রেস কন্ডিশন হ্যান্ডেলিং
-if (window.__fb) {
-initFirebaseListeners();
+// Firebase ready listener check
+if (window.__firebaseReady) {
+  initFirebaseListeners();
 } else {
-window.addEventListener("firebase-ready", () => {
-if (!initFirebaseListeners()) console.warn("Firebase SDK not ready.");
-});
+  window.addEventListener("firebase-ready", () => {
+    if (!initFirebaseListeners()) console.warn("Firebase SDK not ready.");
+  });
 }
 </script>
 </body>
