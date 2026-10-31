@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Metyb — Powered by King Bicchu</title>
+<title> Metyb </title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -664,7 +664,7 @@ const fb = window.__fb;
 if (!fb) return false;
 const { db, ref, onValue } = fb;
 
-// ✅ apps listener with full fallback to service keys
+// apps listener with full fallback to legacy keys and lock support
 onValue(ref(db, "apps"), (snap) => {
 const val = snap.val() || {};
 APPS = Object.entries(val).map(([id, v]) => {
@@ -756,7 +756,7 @@ apps: v.apps != null ? Number(v.apps) : STATS.apps
 renderStats();
 });
 
-// banner listener
+// banner listener (reads from 'banner' node directly)
 onValue(ref(db, "banner"), (snap) => {
 const v = snap.val() || {};
 BANNER = {
@@ -889,7 +889,7 @@ if (blurBg) blurBg.style.opacity = "0.85";
 } else {
 img.removeAttribute("src");
 img.classList.add("hidden");
-fallback.classList.remove("hidden");
+fallback.classList.add("hidden");
 if (blurBg) blurBg.style.opacity = "0.85";
 }
 
@@ -1094,7 +1094,7 @@ renderBanner();
 lucide.createIcons();
 });
 
-// ✅ Firebase লোডিং রেস কন্ডিশন হ্যান্ডেল করা
+// Firebase লোডিং রেস কন্ডিশন হ্যান্ডেলিং
 if (window.__fb) {
 initFirebaseListeners();
 } else {
